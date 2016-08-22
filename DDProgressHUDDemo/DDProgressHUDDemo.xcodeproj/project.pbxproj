@@ -1,0 +1,344 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		900B110F1D6B039D00047010 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 900B110E1D6B039D00047010 /* main.m */; };
+		900B11121D6B039D00047010 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 900B11111D6B039D00047010 /* AppDelegate.m */; };
+		900B11181D6B039D00047010 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 900B11161D6B039D00047010 /* Main.storyboard */; };
+		900B111A1D6B039D00047010 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 900B11191D6B039D00047010 /* Assets.xcassets */; };
+		900B111D1D6B039D00047010 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 900B111B1D6B039D00047010 /* LaunchScreen.storyboard */; };
+		900B113A1D6B03C200047010 /* DDIndefiniteClockAnimatedView.m in Sources */ = {isa = PBXBuildFile; fileRef = 900B11341D6B03C200047010 /* DDIndefiniteClockAnimatedView.m */; };
+		900B113B1D6B03C200047010 /* DDIndefiniteCycleAnimatedView.m in Sources */ = {isa = PBXBuildFile; fileRef = 900B11361D6B03C200047010 /* DDIndefiniteCycleAnimatedView.m */; };
+		900B113C1D6B03C200047010 /* DDProgressHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 900B11371D6B03C200047010 /* DDProgressHUD.bundle */; };
+		900B113D1D6B03C200047010 /* DDProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 900B11391D6B03C200047010 /* DDProgressHUD.m */; };
+		900B11411D6B03E200047010 /* DDTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 900B113F1D6B03E200047010 /* DDTableViewController.m */; };
+		900B11421D6B03E200047010 /* DDTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 900B11401D6B03E200047010 /* DDTableViewController.xib */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		900B110A1D6B039D00047010 /* DDProgressHUDDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DDProgressHUDDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		900B110E1D6B039D00047010 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		900B11101D6B039D00047010 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		900B11111D6B039D00047010 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		900B11171D6B039D00047010 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		900B11191D6B039D00047010 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		900B111C1D6B039D00047010 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		900B111E1D6B039D00047010 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		900B11321D6B03C200047010 /* DDIndefiniteAnimatedProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDIndefiniteAnimatedProtocol.h; sourceTree = "<group>"; };
+		900B11331D6B03C200047010 /* DDIndefiniteClockAnimatedView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDIndefiniteClockAnimatedView.h; sourceTree = "<group>"; };
+		900B11341D6B03C200047010 /* DDIndefiniteClockAnimatedView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDIndefiniteClockAnimatedView.m; sourceTree = "<group>"; };
+		900B11351D6B03C200047010 /* DDIndefiniteCycleAnimatedView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDIndefiniteCycleAnimatedView.h; sourceTree = "<group>"; };
+		900B11361D6B03C200047010 /* DDIndefiniteCycleAnimatedView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDIndefiniteCycleAnimatedView.m; sourceTree = "<group>"; };
+		900B11371D6B03C200047010 /* DDProgressHUD.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = DDProgressHUD.bundle; sourceTree = "<group>"; };
+		900B11381D6B03C200047010 /* DDProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDProgressHUD.h; sourceTree = "<group>"; };
+		900B11391D6B03C200047010 /* DDProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDProgressHUD.m; sourceTree = "<group>"; };
+		900B113E1D6B03E200047010 /* DDTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDTableViewController.h; sourceTree = "<group>"; };
+		900B113F1D6B03E200047010 /* DDTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDTableViewController.m; sourceTree = "<group>"; };
+		900B11401D6B03E200047010 /* DDTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DDTableViewController.xib; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		900B11071D6B039D00047010 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		900B11011D6B039D00047010 = {
+			isa = PBXGroup;
+			children = (
+				900B11311D6B03C200047010 /* DDProgressHUD */,
+				900B110C1D6B039D00047010 /* DDProgressHUDDemo */,
+				900B110B1D6B039D00047010 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		900B110B1D6B039D00047010 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				900B110A1D6B039D00047010 /* DDProgressHUDDemo.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		900B110C1D6B039D00047010 /* DDProgressHUDDemo */ = {
+			isa = PBXGroup;
+			children = (
+				900B11101D6B039D00047010 /* AppDelegate.h */,
+				900B11111D6B039D00047010 /* AppDelegate.m */,
+				900B113E1D6B03E200047010 /* DDTableViewController.h */,
+				900B113F1D6B03E200047010 /* DDTableViewController.m */,
+				900B11401D6B03E200047010 /* DDTableViewController.xib */,
+				900B11161D6B039D00047010 /* Main.storyboard */,
+				900B11191D6B039D00047010 /* Assets.xcassets */,
+				900B111B1D6B039D00047010 /* LaunchScreen.storyboard */,
+				900B111E1D6B039D00047010 /* Info.plist */,
+				900B110D1D6B039D00047010 /* Supporting Files */,
+			);
+			path = DDProgressHUDDemo;
+			sourceTree = "<group>";
+		};
+		900B110D1D6B039D00047010 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				900B110E1D6B039D00047010 /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		900B11311D6B03C200047010 /* DDProgressHUD */ = {
+			isa = PBXGroup;
+			children = (
+				900B11321D6B03C200047010 /* DDIndefiniteAnimatedProtocol.h */,
+				900B11331D6B03C200047010 /* DDIndefiniteClockAnimatedView.h */,
+				900B11341D6B03C200047010 /* DDIndefiniteClockAnimatedView.m */,
+				900B11351D6B03C200047010 /* DDIndefiniteCycleAnimatedView.h */,
+				900B11361D6B03C200047010 /* DDIndefiniteCycleAnimatedView.m */,
+				900B11371D6B03C200047010 /* DDProgressHUD.bundle */,
+				900B11381D6B03C200047010 /* DDProgressHUD.h */,
+				900B11391D6B03C200047010 /* DDProgressHUD.m */,
+			);
+			name = DDProgressHUD;
+			path = ../DDProgressHUD;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		900B11091D6B039D00047010 /* DDProgressHUDDemo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 900B11211D6B039D00047010 /* Build configuration list for PBXNativeTarget "DDProgressHUDDemo" */;
+			buildPhases = (
+				900B11061D6B039D00047010 /* Sources */,
+				900B11071D6B039D00047010 /* Frameworks */,
+				900B11081D6B039D00047010 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = DDProgressHUDDemo;
+			productName = DDProgressHUDDemo;
+			productReference = 900B110A1D6B039D00047010 /* DDProgressHUDDemo.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		900B11021D6B039D00047010 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0730;
+				ORGANIZATIONNAME = LiLingang;
+				TargetAttributes = {
+					900B11091D6B039D00047010 = {
+						CreatedOnToolsVersion = 7.3.1;
+					};
+				};
+			};
+			buildConfigurationList = 900B11051D6B039D00047010 /* Build configuration list for PBXProject "DDProgressHUDDemo" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 900B11011D6B039D00047010;
+			productRefGroup = 900B110B1D6B039D00047010 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				900B11091D6B039D00047010 /* DDProgressHUDDemo */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		900B11081D6B039D00047010 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				900B111D1D6B039D00047010 /* LaunchScreen.storyboard in Resources */,
+				900B11421D6B03E200047010 /* DDTableViewController.xib in Resources */,
+				900B111A1D6B039D00047010 /* Assets.xcassets in Resources */,
+				900B113C1D6B03C200047010 /* DDProgressHUD.bundle in Resources */,
+				900B11181D6B039D00047010 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		900B11061D6B039D00047010 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				900B113B1D6B03C200047010 /* DDIndefiniteCycleAnimatedView.m in Sources */,
+				900B11121D6B039D00047010 /* AppDelegate.m in Sources */,
+				900B110F1D6B039D00047010 /* main.m in Sources */,
+				900B11411D6B03E200047010 /* DDTableViewController.m in Sources */,
+				900B113D1D6B03C200047010 /* DDProgressHUD.m in Sources */,
+				900B113A1D6B03C200047010 /* DDIndefiniteClockAnimatedView.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		900B11161D6B039D00047010 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				900B11171D6B039D00047010 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		900B111B1D6B039D00047010 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				900B111C1D6B039D00047010 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		900B111F1D6B039D00047010 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		900B11201D6B039D00047010 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		900B11221D6B039D00047010 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = DDProgressHUDDemo/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = huami.DDProgressHUDDemo;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		900B11231D6B039D00047010 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = DDProgressHUDDemo/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = huami.DDProgressHUDDemo;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		900B11051D6B039D00047010 /* Build configuration list for PBXProject "DDProgressHUDDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				900B111F1D6B039D00047010 /* Debug */,
+				900B11201D6B039D00047010 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		900B11211D6B039D00047010 /* Build configuration list for PBXNativeTarget "DDProgressHUDDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				900B11221D6B039D00047010 /* Debug */,
+				900B11231D6B039D00047010 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 900B11021D6B039D00047010 /* Project object */;
+}
