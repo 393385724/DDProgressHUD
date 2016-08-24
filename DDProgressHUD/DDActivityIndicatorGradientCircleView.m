@@ -38,6 +38,7 @@ const int DDAngleMaxStartToEndValue = 160;
         self.rightSicircleStartAngle = 0;
         self.rightSicircleEndAngle = 10;
         _needRollback = NO;
+        self.backgroundColor = [UIColor clearColor];
         self.tintColor = [UIColor whiteColor];
     }
     return self;
