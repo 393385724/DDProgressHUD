@@ -47,18 +47,18 @@
     NSString *title = _dataSource[indexPath.row];
     if ([title isEqualToString:@"圆弧Loading"]) {
         [DDProgressHUD showHUDWithStatus:@"圆弧Loading"];
-        [DDProgressHUD dismissWithDelay:5 completion:^{
+        [DDProgressHUD dismissWithDelay:3 completion:^{
             NSLog(@"消失");
         }];
     } else if ([title isEqualToString:@"钟表Loading"]){
         [DDProgressHUD showClockWithStatus:@"钟表Loading"];
-        [DDProgressHUD dismissWithDelay:5 completion:^{
+        [DDProgressHUD dismissWithDelay:3 completion:^{
             NSLog(@"钟表消失");
         }];
     } else if ([title isEqualToString:@"成功Alter"]){
         [DDProgressHUD showSucessWithStatus:@"成功Alter"];
     } else if ([title isEqualToString:@"失败Alter"]){
-        [DDProgressHUD showSucessWithStatus:@"失败Alter"];
+        [DDProgressHUD showErrorWithStatus:@"失败Alter"];
     } else if ([title isEqualToString:@"文字Alter"]){
         [DDProgressHUD showWithStatus:@"文字Alter"];
     }

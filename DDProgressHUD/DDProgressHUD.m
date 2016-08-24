@@ -7,8 +7,8 @@
 //
 
 #import "DDProgressHUD.h"
-#import "DDIndefiniteCycleAnimatedView.h"
-#import "DDIndefiniteClockAnimatedView.h"
+#import "DDActivityIndicatorView.h"
+#import "DDActivityIndicatorGradientCircleView.h"
 
 /**@brief 各个元素之间的纵向间距*/
 CGFloat DDItemsVerticalSpace = 12.0f;
@@ -33,10 +33,10 @@ typedef NS_ENUM(NSUInteger, DDProgressHUDType) {
 @property (nonatomic, strong) UIView *overlayView;
 /**@brief 提示框容器*/
 @property (nonatomic, strong) UIView *hudView;
-/**@brief 无限CycleView*/
-@property (nonatomic, strong) DDIndefiniteCycleAnimatedView *indefiniteCycleView;
-/**@brief 无限ClockView*/
-@property (nonatomic, strong) DDIndefiniteClockAnimatedView *indefiniteClockView;
+/**@brief 指示器*/
+@property (nonatomic, strong) DDActivityIndicatorView *activityIndicatorView;
+/**@brief 渐变圆圈*/
+@property (nonatomic, strong) DDActivityIndicatorGradientCircleView *indicatorGradientCircleView;
 /**@brief 图片View*/
 @property (nonatomic, strong) UIImageView *imageView;
 /**@brief 提示文案*/
@@ -94,18 +94,18 @@ typedef NS_ENUM(NSUInteger, DDProgressHUDType) {
     if (self) {
         self.alpha = 0.0;
         [self resetToDefult];
-        NSBundle *bundle = [NSBundle bundleForClass:[DDProgressHUD class]];
-        NSURL *url = [[NSBundle mainBundle] URLForResource:@"DDProgressHUD" withExtension:@"bundle"];
-        NSBundle *imageBundle = [NSBundle bundleWithURL:url];
-        UIImage* successImage = [UIImage imageWithContentsOfFile:[imageBundle pathForResource:@"success" ofType:@"tiff"]];
-        UIImage* errorImage = [UIImage imageWithContentsOfFile:[imageBundle pathForResource:@"error" ofType:@"tiff"]];
-        if ([[UIImage class] instancesRespondToSelector:@selector(imageWithRenderingMode:)]) {
-            _successImage = [successImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-            _errorImage = [errorImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        } else {
-            _successImage = successImage;
-            _errorImage = errorImage;
+        NSBundle *mainBundle = [NSBundle bundleForClass:[DDProgressHUD class]];
+        NSString *imageBundlePath = [mainBundle pathForResource:@"DDProgressHUD" ofType:@"bundle"];
+        NSBundle *imageBundle = [NSBundle bundleWithPath:imageBundlePath];
+        NSInteger scale = 2;
+        if ([[UIScreen mainScreen] respondsToSelector:@selector(scale)]) {
+            scale = [UIScreen mainScreen].scale;
         }
+        if (scale < 2 || scale > 3) {
+            scale = 2;
+        }
+        _successImage = [UIImage imageWithContentsOfFile:[imageBundle pathForResource:[NSString stringWithFormat:@"success@%ldx",(long)scale] ofType:@"png"]];
+        _errorImage = [UIImage imageWithContentsOfFile:[imageBundle pathForResource:[NSString stringWithFormat:@"error@%ldx",(long)scale] ofType:@"png"]];
     }
     return self;
 }
@@ -162,8 +162,6 @@ typedef NS_ENUM(NSUInteger, DDProgressHUDType) {
     }
 }
 
-
-
 + (void)dismiss{
     [self dismissWithDelay:0 completion:nil];
 }
@@ -189,36 +187,61 @@ typedef NS_ENUM(NSUInteger, DDProgressHUDType) {
 - (void)showHUDStatus:(NSString *)status{
     [self.fadeOutTimer invalidate];
     self.fadeOutTimer = nil;
-    [self cancelIndefiniteAnimation];
+    [self cancelImageView];
+    [self updateViewHierarchy];
+    self.overlayView.userInteractionEnabled = YES;
+    switch (self.hudType) {
+        case DDProgressHUDTypeCycle: {
+            [self cancelActivityAnimation];
+            if (!self.indicatorGradientCircleView) {
+                self.indicatorGradientCircleView = [[DDActivityIndicatorGradientCircleView alloc] initWithFrame:CGRectMake(0, 0, 18.0f, 18.0f)];
+                self.indicatorGradientCircleView.translatesAutoresizingMaskIntoConstraints = NO;
+                [self.hudView addSubview:self.indicatorGradientCircleView];
+                [self addLayoutConstraintsWithTopView:self.indicatorGradientCircleView descriptionKey:@"indicatorGradientCircleView" height:CGRectGetWidth(self.indicatorGradientCircleView.bounds)];
+            }
+            [self.indicatorGradientCircleView startAnimating];
+            break;
+        }
+        case DDProgressHUDTypeClock: {
+            [self cancelCircleAniamtion];
+            if (!self.activityIndicatorView) {
+                self.activityIndicatorView = [[DDActivityIndicatorView alloc] initWithType:DGActivityIndicatorAnimationTypeClock tintColor:[UIColor whiteColor] size:32.0f];
+                self.activityIndicatorView.frame = CGRectMake(0, 0, self.activityIndicatorView.size, self.activityIndicatorView.size);
+                self.activityIndicatorView.translatesAutoresizingMaskIntoConstraints = NO;
+                [self.hudView addSubview:self.activityIndicatorView];
+                [self addLayoutConstraintsWithTopView:self.activityIndicatorView descriptionKey:@"activityIndicatorView" height:CGRectGetWidth(self.activityIndicatorView.bounds)];
+            }
+            [self.activityIndicatorView startAnimating];
+            break;
+        }
+        default:{
+            break;
+        }
+    }
     [self showWithStatus:status];
 }
 
 - (void)showImage:(UIImage *)image status:(NSString *)status duration:(NSTimeInterval)duration{
     [self.fadeOutTimer invalidate];
     self.fadeOutTimer = nil;
-    [self cancelIndefiniteAnimation];
+    [self cancelCircleAniamtion];
+    [self cancelActivityAnimation];
+    [self updateViewHierarchy];
     self.overlayView.userInteractionEnabled = NO;
     if (self.hudType == DDProgressHUDTypeImage) {
+        if (!self.imageView) {
+            self.imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 18.0f, 18.0f)];
+            self.imageView.backgroundColor = [UIColor clearColor];
+            self.imageView.contentMode = UIViewContentModeScaleAspectFit;
+            self.imageView.translatesAutoresizingMaskIntoConstraints=NO;
+            [self.hudView addSubview:self.imageView];
+            [self addLayoutConstraintsWithTopView:self.imageView descriptionKey:@"imageView" height:CGRectGetWidth(self.imageView.bounds)];
+        }
         self.imageView.image = image;
-        CGFloat imageWidth = image.size.width/image.scale;
-        [self addLayoutConstraintsWithTopView:self.imageView descriptionKey:@"imageView" height:MIN(imageWidth, 18.0f)];
     }
     [self showWithStatus:status];
     self.fadeOutTimer = [NSTimer timerWithTimeInterval:duration target:self selector:@selector(dismiss) userInfo:nil repeats:NO];
     [[NSRunLoop mainRunLoop] addTimer:self.fadeOutTimer forMode:NSRunLoopCommonModes];
-}
-
-
-- (void)resetToDefult{
-    self.hudType = DDProgressHUDTypeInit;
-    self.fadeInAnimationDuration = 0.15;
-    self.fadeOutAnimationDuration = 0.15;
-    self.isAttributedString = NO;
-    self.statusLabelMaxWidth = ceil(CGRectGetWidth(self.bounds)*0.6 - 2*DDStatusLabelHorizontaMargin);
-    
-    self.labelFont = [UIFont systemFontOfSize:12.0f];
-    self.labelLineSpacing = 8.0f;
-    self.textColor = [UIColor whiteColor];
 }
 
 #pragma mark - --------UI----------
@@ -251,39 +274,8 @@ typedef NS_ENUM(NSUInteger, DDProgressHUDType) {
     }
 }
 
-- (void)updateStatus:(NSString *)status{
-    CGFloat estimateStatusLabelHeight = [self calculateStatusLabelSizeWithString:status isAttributedString:NO].height;
-    self.isAttributedString = ABS(estimateStatusLabelHeight - self.statusLabel.font.lineHeight) >= 2.0;
-    if (self.isAttributedString) {
-        self.statusLabel.attributedText = [[NSAttributedString alloc] initWithString:status attributes:[self statusTextAttributes]];
-    } else {
-        self.statusLabel.text = status;
-    }
-    [self updateHUDFrame];
-}
-
 - (void)showWithStatus:(NSString*)status {
-    [self updateViewHierarchy];
-    switch (self.hudType) {
-        case DDProgressHUDTypeCycle: {
-            self.overlayView.userInteractionEnabled = YES;
-            [self addLayoutConstraintsWithTopView:self.indefiniteCycleView descriptionKey:@"indefiniteCycleView" height:18.0f];
-            [self.indefiniteCycleView startAnimation];
-            break;
-        }
-        case DDProgressHUDTypeClock: {
-            self.overlayView.userInteractionEnabled = YES;
-            [self addLayoutConstraintsWithTopView:self.indefiniteClockView descriptionKey:@"indefiniteClockView" height:32.0f];
-            [self.indefiniteClockView startAnimation];
-            break;
-        }
-        default:{
-            self.overlayView.userInteractionEnabled = NO;
-            break;
-        }
-    }
     [self updateStatus:status];
-    
     if (self.alpha != 1.0 || self.hudView.alpha != 1.0) {
         self.alpha = 0.0f;
         self.hudView.alpha = 0.0f;
@@ -307,37 +299,127 @@ typedef NS_ENUM(NSUInteger, DDProgressHUDType) {
     }
 }
 
-- (void)cancelIndefiniteAnimation{
+- (void)updateStatus:(NSString *)status{
+    CGFloat estimateStatusLabelHeight = [self calculateStatusLabelSizeWithString:status isAttributedString:NO].height;
+    self.isAttributedString = ABS(estimateStatusLabelHeight - self.statusLabel.font.lineHeight) >= 2.0;
+    if (self.isAttributedString) {
+        self.statusLabel.attributedText = [[NSAttributedString alloc] initWithString:status attributes:[self statusTextAttributes]];
+    } else {
+        self.statusLabel.text = status;
+    }
+    [self updateHUDFrame];
+}
+
+#pragma mark - Clear
+
+- (void)resetToDefult{
+    self.hudType = DDProgressHUDTypeInit;
+    self.fadeInAnimationDuration = 0.15;
+    self.fadeOutAnimationDuration = 0.15;
+    self.isAttributedString = NO;
+    self.statusLabelMaxWidth = ceil(CGRectGetWidth(self.bounds)*0.6 - 2*DDStatusLabelHorizontaMargin);
+    
+    self.labelFont = [UIFont systemFontOfSize:12.0f];
+    self.labelLineSpacing = 8.0f;
+    self.textColor = [UIColor whiteColor];
+}
+
+
+- (void)cancelImageView{
+    if (!self.imageView) {
+        return;
+    }
+    [self.hudView removeConstraint:self.indefiniteCenterXConstraint];
+    self.indefiniteCenterXConstraint = nil;
+    
+    [self.hudView removeConstraint:self.indefiniteTopConstraint];
+    self.indefiniteTopConstraint = nil;
+    
+    [self.imageView removeConstraint:self.indefiniteWidthConstraint];
+    self.indefiniteWidthConstraint = nil;
+    
+    [self.imageView removeConstraint:self.indefiniteHeightConstraint];
+    self.indefiniteHeightConstraint = nil;
+    
+    [self.imageView removeFromSuperview];
+    self.imageView = nil;
+}
+
+- (void)cancelCircleAniamtion{
+    if (!self.indicatorGradientCircleView) {
+        return;
+    }
+    [self.hudView removeConstraint:self.indefiniteCenterXConstraint];
+    self.indefiniteCenterXConstraint = nil;
+    
+    [self.hudView removeConstraint:self.indefiniteTopConstraint];
+    self.indefiniteTopConstraint = nil;
+    
+    [self.indicatorGradientCircleView removeConstraint:self.indefiniteWidthConstraint];
+    self.indefiniteWidthConstraint = nil;
+    
+    [self.indicatorGradientCircleView removeConstraint:self.indefiniteHeightConstraint];
+    self.indefiniteHeightConstraint = nil;
+    
+    [self.indicatorGradientCircleView stopAnimating];
+    [self.indicatorGradientCircleView removeFromSuperview];
+    self.indicatorGradientCircleView = nil;
+}
+
+- (void)cancelActivityAnimation{
+    if (!self.activityIndicatorView) {
+        return;
+    }
     [self.hudView removeConstraint:self.indefiniteCenterXConstraint];
     self.indefiniteCenterXConstraint = nil;
 
     [self.hudView removeConstraint:self.indefiniteTopConstraint];
     self.indefiniteTopConstraint = nil;
 
-    [self.indefiniteClockView removeConstraint:self.indefiniteWidthConstraint];
-    [self.indefiniteCycleView removeConstraint:self.indefiniteWidthConstraint];
-    [self.imageView removeConstraint:self.indefiniteWidthConstraint];
+    [self.activityIndicatorView removeConstraint:self.indefiniteWidthConstraint];
     self.indefiniteWidthConstraint = nil;
     
-    [self.indefiniteClockView removeConstraint:self.indefiniteHeightConstraint];
-    [self.indefiniteCycleView removeConstraint:self.indefiniteHeightConstraint];
-    [self.imageView removeConstraint:self.indefiniteHeightConstraint];
+    [self.activityIndicatorView removeConstraint:self.indefiniteHeightConstraint];
     self.indefiniteHeightConstraint = nil;
-    
-    if (self.hudType != DDProgressHUDTypeCycle) {
-        [self.indefiniteCycleView stopAnimation];
-        [self.indefiniteCycleView removeFromSuperview];
-    }
 
-    if (self.hudType != DDProgressHUDTypeClock) {
-        [self.indefiniteClockView stopAnimation];
-        [self.indefiniteClockView removeFromSuperview];
-    }
-    
-    if (self.hudType != DDProgressHUDTypeImage) {
-        [self.imageView removeFromSuperview];
-    }
+    [self.activityIndicatorView stopAnimating];
+    [self.activityIndicatorView removeFromSuperview];
+    self.activityIndicatorView = nil;
 }
+
+- (void)clearAll{
+    [self resetToDefult];
+    [self cancelImageView];
+    [self cancelCircleAniamtion];
+    [self cancelActivityAnimation];
+    
+    [self removeConstraint:self.hudCenterXConstraint];
+    self.hudCenterXConstraint = nil;
+    [self removeConstraint:self.hudCenterYConstraint];
+    self.hudCenterYConstraint = nil;
+    
+    [self.hudView removeConstraint:self.hudViewWidthConstraint];
+    self.hudViewWidthConstraint = nil;
+    [self.hudView removeConstraint:self.hudViewHeightConstraint];
+    self.hudViewHeightConstraint = nil;
+
+    
+    [self.hudView removeConstraints:self.statusLabelConstraints];
+    self.statusLabelConstraints = nil;
+    [self.hudView removeConstraint:self.statusLabelTopConstraint];
+    self.statusLabelTopConstraint = nil;
+    [self.hudView removeConstraint:self.statusLabelHeightConstraint];
+    self.statusLabelHeightConstraint = nil;
+
+    [self.hudView removeFromSuperview];
+    self.hudView = nil;
+    [self.overlayView removeFromSuperview];
+    self.overlayView = nil;
+    [self.fadeOutTimer invalidate];
+    self.fadeOutTimer = nil;
+    [self removeFromSuperview];
+}
+
 #pragma mark - ----------Frame
 
 - (CGSize)calculateStatusLabelSizeWithString:(NSString *)string isAttributedString:(BOOL)isAttributedString{
@@ -401,16 +483,7 @@ typedef NS_ENUM(NSUInteger, DDProgressHUDType) {
             };
             __block void (^completionBlock)(void) = ^{
                 if(strongSelf.alpha == 0.0f && strongSelf.hudView.alpha == 0.0f){
-                    [strongSelf resetToDefult];
-                    [strongSelf cancelIndefiniteAnimation];
-                    [strongSelf clearAllLayoutConstraints];
-                    [strongSelf.fadeOutTimer invalidate];
-                    strongSelf.fadeOutTimer = nil;
-                    [strongSelf.overlayView removeFromSuperview];
-                    strongSelf.overlayView = nil;
-                    [strongSelf.hudView removeFromSuperview];
-                    strongSelf.hudView = nil;
-                    [strongSelf removeFromSuperview];
+                    [strongSelf clearAll];
                     if (completion) {
                         completion();
                     }
@@ -440,41 +513,6 @@ typedef NS_ENUM(NSUInteger, DDProgressHUDType) {
 }
 
 #pragma mark - NSLayoutConstraint
-
-- (void)clearAllLayoutConstraints{
-    [self removeConstraint:self.hudCenterXConstraint];
-    self.hudCenterXConstraint = nil;
-    [self removeConstraint:self.hudCenterYConstraint];
-    self.hudCenterYConstraint = nil;
-    
-    [self.hudView removeConstraint:self.hudViewWidthConstraint];
-    self.hudViewWidthConstraint = nil;
-    [self.hudView removeConstraint:self.hudViewHeightConstraint];
-    self.hudViewHeightConstraint = nil;
-    [self.hudView removeConstraint:self.indefiniteCenterXConstraint];
-    self.indefiniteCenterXConstraint = nil;
-    [self.hudView removeConstraint:self.indefiniteTopConstraint];
-    self.indefiniteTopConstraint = nil;
-
-    
-    [self.hudView removeConstraints:self.statusLabelConstraints];
-    self.statusLabelConstraints = nil;
-    [self.hudView removeConstraint:self.statusLabelTopConstraint];
-    self.statusLabelTopConstraint = nil;
-    [self.hudView removeConstraint:self.statusLabelHeightConstraint];
-    self.statusLabelHeightConstraint = nil;
-    
-    [self.indefiniteClockView removeConstraint:self.indefiniteWidthConstraint];
-    [self.indefiniteCycleView removeConstraint:self.indefiniteWidthConstraint];
-    [self.imageView removeConstraint:self.indefiniteWidthConstraint];
-    self.indefiniteWidthConstraint = nil;
-    
-    [self.indefiniteClockView removeConstraint:self.indefiniteHeightConstraint];
-    [self.indefiniteCycleView removeConstraint:self.indefiniteHeightConstraint];
-    [self.imageView removeConstraint:self.indefiniteHeightConstraint];
-    self.indefiniteHeightConstraint = nil;
-}
-
 - (void)addHudViewLayoutConstraints{
     NSDictionary* views = @{@"hudView":self.hudView};
 
@@ -552,41 +590,6 @@ typedef NS_ENUM(NSUInteger, DDProgressHUDType) {
         _hudView.layer.cornerRadius = 4.0f;
     }
     return _hudView;
-}
-
-- (DDIndefiniteCycleAnimatedView *)indefiniteCycleView{
-    if (!_indefiniteCycleView) {
-        _indefiniteCycleView = [[DDIndefiniteCycleAnimatedView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 18.0f, 18.0f)];
-        _indefiniteCycleView.translatesAutoresizingMaskIntoConstraints=NO;
-    }
-    if(!_indefiniteCycleView.superview) {
-        [self.hudView addSubview:_indefiniteCycleView];
-    }
-    return _indefiniteCycleView;
-}
-
-- (DDIndefiniteClockAnimatedView *)indefiniteClockView{
-    if (!_indefiniteClockView) {
-        _indefiniteClockView = [[DDIndefiniteClockAnimatedView alloc] initWithFrame:CGRectMake(0, 0, 32.0, 32.0)];
-        _indefiniteClockView.translatesAutoresizingMaskIntoConstraints=NO;
-    }
-    if (!_indefiniteClockView.superview) {
-        [self.hudView addSubview:_indefiniteClockView];
-    }
-    return _indefiniteClockView;
-}
-
-- (UIImageView*)imageView {
-    if(!_imageView) {
-        _imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 28.0f, 28.0f)];
-        _imageView.backgroundColor = [UIColor clearColor];
-        _imageView.contentMode = UIViewContentModeScaleAspectFit;
-        _imageView.translatesAutoresizingMaskIntoConstraints=NO;
-    }
-    if(!_imageView.superview) {
-        [self.hudView addSubview:_imageView];
-    }
-    return _imageView;
 }
 
 - (UILabel*)statusLabel {

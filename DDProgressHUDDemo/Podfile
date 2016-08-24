@@ -1,0 +1,9 @@
+source 'https://github.com/CocoaPods/Specs.git'
+platform :ios,'7.0'
+
+workspace 'DDProgressHUDDemo'
+
+target :DDProgressHUDDemo do
+  xcodeproj 'DDProgressHUDDemo'
+  pod 'DGActivityIndicatorView', :git => 'https://github.com/393385724/DGActivityIndicatorView.git', :commit => '926c5140e40ec216eb5b9ac3a6add23bf4221fd8'
+end

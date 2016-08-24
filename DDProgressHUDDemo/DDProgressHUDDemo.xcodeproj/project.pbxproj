@@ -7,20 +7,24 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0E23B86AD60551C9D283B8CD /* libPods-DDProgressHUDDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B07D6DA9CA5E1FE7840E14A /* libPods-DDProgressHUDDemo.a */; };
 		900B110F1D6B039D00047010 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 900B110E1D6B039D00047010 /* main.m */; };
 		900B11121D6B039D00047010 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 900B11111D6B039D00047010 /* AppDelegate.m */; };
 		900B11181D6B039D00047010 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 900B11161D6B039D00047010 /* Main.storyboard */; };
 		900B111A1D6B039D00047010 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 900B11191D6B039D00047010 /* Assets.xcassets */; };
 		900B111D1D6B039D00047010 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 900B111B1D6B039D00047010 /* LaunchScreen.storyboard */; };
-		900B113A1D6B03C200047010 /* DDIndefiniteClockAnimatedView.m in Sources */ = {isa = PBXBuildFile; fileRef = 900B11341D6B03C200047010 /* DDIndefiniteClockAnimatedView.m */; };
-		900B113B1D6B03C200047010 /* DDIndefiniteCycleAnimatedView.m in Sources */ = {isa = PBXBuildFile; fileRef = 900B11361D6B03C200047010 /* DDIndefiniteCycleAnimatedView.m */; };
-		900B113C1D6B03C200047010 /* DDProgressHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 900B11371D6B03C200047010 /* DDProgressHUD.bundle */; };
 		900B113D1D6B03C200047010 /* DDProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 900B11391D6B03C200047010 /* DDProgressHUD.m */; };
 		900B11411D6B03E200047010 /* DDTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 900B113F1D6B03E200047010 /* DDTableViewController.m */; };
 		900B11421D6B03E200047010 /* DDTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 900B11401D6B03E200047010 /* DDTableViewController.xib */; };
+		904D30141D6C559200164410 /* DDProgressHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 904D30131D6C559200164410 /* DDProgressHUD.bundle */; };
+		9094C07B1D6C1D59008F021A /* DDActivityIndicatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9094C07A1D6C1D59008F021A /* DDActivityIndicatorView.m */; };
+		9094C07E1D6C4B47008F021A /* DDActivityIndicatorGradientCircleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9094C07D1D6C4B47008F021A /* DDActivityIndicatorGradientCircleView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		7636074D1F314651A3ACE15B /* Pods-DDProgressHUDDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DDProgressHUDDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-DDProgressHUDDemo/Pods-DDProgressHUDDemo.release.xcconfig"; sourceTree = "<group>"; };
+		8B07D6DA9CA5E1FE7840E14A /* libPods-DDProgressHUDDemo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-DDProgressHUDDemo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		8DC850FB2300795BF9EE3BA1 /* Pods-DDProgressHUDDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DDProgressHUDDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-DDProgressHUDDemo/Pods-DDProgressHUDDemo.debug.xcconfig"; sourceTree = "<group>"; };
 		900B110A1D6B039D00047010 /* DDProgressHUDDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DDProgressHUDDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		900B110E1D6B039D00047010 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		900B11101D6B039D00047010 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -29,17 +33,16 @@
 		900B11191D6B039D00047010 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		900B111C1D6B039D00047010 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		900B111E1D6B039D00047010 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		900B11321D6B03C200047010 /* DDIndefiniteAnimatedProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDIndefiniteAnimatedProtocol.h; sourceTree = "<group>"; };
-		900B11331D6B03C200047010 /* DDIndefiniteClockAnimatedView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDIndefiniteClockAnimatedView.h; sourceTree = "<group>"; };
-		900B11341D6B03C200047010 /* DDIndefiniteClockAnimatedView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDIndefiniteClockAnimatedView.m; sourceTree = "<group>"; };
-		900B11351D6B03C200047010 /* DDIndefiniteCycleAnimatedView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDIndefiniteCycleAnimatedView.h; sourceTree = "<group>"; };
-		900B11361D6B03C200047010 /* DDIndefiniteCycleAnimatedView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDIndefiniteCycleAnimatedView.m; sourceTree = "<group>"; };
-		900B11371D6B03C200047010 /* DDProgressHUD.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = DDProgressHUD.bundle; sourceTree = "<group>"; };
 		900B11381D6B03C200047010 /* DDProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDProgressHUD.h; sourceTree = "<group>"; };
 		900B11391D6B03C200047010 /* DDProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDProgressHUD.m; sourceTree = "<group>"; };
 		900B113E1D6B03E200047010 /* DDTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDTableViewController.h; sourceTree = "<group>"; };
 		900B113F1D6B03E200047010 /* DDTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDTableViewController.m; sourceTree = "<group>"; };
 		900B11401D6B03E200047010 /* DDTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DDTableViewController.xib; sourceTree = "<group>"; };
+		904D30131D6C559200164410 /* DDProgressHUD.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = DDProgressHUD.bundle; sourceTree = "<group>"; };
+		9094C0791D6C1D59008F021A /* DDActivityIndicatorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDActivityIndicatorView.h; sourceTree = "<group>"; };
+		9094C07A1D6C1D59008F021A /* DDActivityIndicatorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDActivityIndicatorView.m; sourceTree = "<group>"; };
+		9094C07C1D6C4B47008F021A /* DDActivityIndicatorGradientCircleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDActivityIndicatorGradientCircleView.h; sourceTree = "<group>"; };
+		9094C07D1D6C4B47008F021A /* DDActivityIndicatorGradientCircleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDActivityIndicatorGradientCircleView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -47,18 +50,29 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0E23B86AD60551C9D283B8CD /* libPods-DDProgressHUDDemo.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5C9C5ACA568985BDF6F214B2 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				8B07D6DA9CA5E1FE7840E14A /* libPods-DDProgressHUDDemo.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		900B11011D6B039D00047010 = {
 			isa = PBXGroup;
 			children = (
 				900B11311D6B03C200047010 /* DDProgressHUD */,
 				900B110C1D6B039D00047010 /* DDProgressHUDDemo */,
 				900B110B1D6B039D00047010 /* Products */,
+				A634E05230E1F47F880034A3 /* Pods */,
+				5C9C5ACA568985BDF6F214B2 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -98,17 +112,25 @@
 		900B11311D6B03C200047010 /* DDProgressHUD */ = {
 			isa = PBXGroup;
 			children = (
-				900B11321D6B03C200047010 /* DDIndefiniteAnimatedProtocol.h */,
-				900B11331D6B03C200047010 /* DDIndefiniteClockAnimatedView.h */,
-				900B11341D6B03C200047010 /* DDIndefiniteClockAnimatedView.m */,
-				900B11351D6B03C200047010 /* DDIndefiniteCycleAnimatedView.h */,
-				900B11361D6B03C200047010 /* DDIndefiniteCycleAnimatedView.m */,
-				900B11371D6B03C200047010 /* DDProgressHUD.bundle */,
+				904D30131D6C559200164410 /* DDProgressHUD.bundle */,
+				9094C07C1D6C4B47008F021A /* DDActivityIndicatorGradientCircleView.h */,
+				9094C07D1D6C4B47008F021A /* DDActivityIndicatorGradientCircleView.m */,
+				9094C0791D6C1D59008F021A /* DDActivityIndicatorView.h */,
+				9094C07A1D6C1D59008F021A /* DDActivityIndicatorView.m */,
 				900B11381D6B03C200047010 /* DDProgressHUD.h */,
 				900B11391D6B03C200047010 /* DDProgressHUD.m */,
 			);
 			name = DDProgressHUD;
 			path = ../DDProgressHUD;
+			sourceTree = "<group>";
+		};
+		A634E05230E1F47F880034A3 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				8DC850FB2300795BF9EE3BA1 /* Pods-DDProgressHUDDemo.debug.xcconfig */,
+				7636074D1F314651A3ACE15B /* Pods-DDProgressHUDDemo.release.xcconfig */,
+			);
+			name = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -118,9 +140,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 900B11211D6B039D00047010 /* Build configuration list for PBXNativeTarget "DDProgressHUDDemo" */;
 			buildPhases = (
+				C4E2B0F8DA0F81BAAE5D6E69 /* [CP] Check Pods Manifest.lock */,
 				900B11061D6B039D00047010 /* Sources */,
 				900B11071D6B039D00047010 /* Frameworks */,
 				900B11081D6B039D00047010 /* Resources */,
+				E4A506D8FD82DCB622587280 /* [CP] Embed Pods Frameworks */,
+				266DD75E4059C134FAB9D8AB /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -169,26 +194,74 @@
 			buildActionMask = 2147483647;
 			files = (
 				900B111D1D6B039D00047010 /* LaunchScreen.storyboard in Resources */,
+				904D30141D6C559200164410 /* DDProgressHUD.bundle in Resources */,
 				900B11421D6B03E200047010 /* DDTableViewController.xib in Resources */,
 				900B111A1D6B039D00047010 /* Assets.xcassets in Resources */,
-				900B113C1D6B03C200047010 /* DDProgressHUD.bundle in Resources */,
 				900B11181D6B039D00047010 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		266DD75E4059C134FAB9D8AB /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-DDProgressHUDDemo/Pods-DDProgressHUDDemo-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C4E2B0F8DA0F81BAAE5D6E69 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		E4A506D8FD82DCB622587280 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-DDProgressHUDDemo/Pods-DDProgressHUDDemo-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		900B11061D6B039D00047010 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				900B113B1D6B03C200047010 /* DDIndefiniteCycleAnimatedView.m in Sources */,
 				900B11121D6B039D00047010 /* AppDelegate.m in Sources */,
+				9094C07E1D6C4B47008F021A /* DDActivityIndicatorGradientCircleView.m in Sources */,
 				900B110F1D6B039D00047010 /* main.m in Sources */,
 				900B11411D6B03E200047010 /* DDTableViewController.m in Sources */,
 				900B113D1D6B03C200047010 /* DDProgressHUD.m in Sources */,
-				900B113A1D6B03C200047010 /* DDIndefiniteClockAnimatedView.m in Sources */,
+				9094C07B1D6C1D59008F021A /* DDActivityIndicatorView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -298,6 +371,7 @@
 		};
 		900B11221D6B039D00047010 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8DC850FB2300795BF9EE3BA1 /* Pods-DDProgressHUDDemo.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = DDProgressHUDDemo/Info.plist;
@@ -309,6 +383,7 @@
 		};
 		900B11231D6B039D00047010 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7636074D1F314651A3ACE15B /* Pods-DDProgressHUDDemo.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = DDProgressHUDDemo/Info.plist;
@@ -337,6 +412,7 @@
 				900B11231D6B039D00047010 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
