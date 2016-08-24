@@ -16,7 +16,10 @@
 		900B113D1D6B03C200047010 /* DDProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 900B11391D6B03C200047010 /* DDProgressHUD.m */; };
 		900B11411D6B03E200047010 /* DDTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 900B113F1D6B03E200047010 /* DDTableViewController.m */; };
 		900B11421D6B03E200047010 /* DDTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 900B11401D6B03E200047010 /* DDTableViewController.xib */; };
-		904D30141D6C559200164410 /* DDProgressHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 904D30131D6C559200164410 /* DDProgressHUD.bundle */; };
+		904D30191D6D8FC900164410 /* error@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 904D30151D6D8FC900164410 /* error@2x.png */; };
+		904D301A1D6D8FC900164410 /* error@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 904D30161D6D8FC900164410 /* error@3x.png */; };
+		904D301B1D6D8FC900164410 /* success@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 904D30171D6D8FC900164410 /* success@2x.png */; };
+		904D301C1D6D8FC900164410 /* success@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 904D30181D6D8FC900164410 /* success@3x.png */; };
 		9094C07B1D6C1D59008F021A /* DDActivityIndicatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9094C07A1D6C1D59008F021A /* DDActivityIndicatorView.m */; };
 		9094C07E1D6C4B47008F021A /* DDActivityIndicatorGradientCircleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9094C07D1D6C4B47008F021A /* DDActivityIndicatorGradientCircleView.m */; };
 /* End PBXBuildFile section */
@@ -38,7 +41,10 @@
 		900B113E1D6B03E200047010 /* DDTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDTableViewController.h; sourceTree = "<group>"; };
 		900B113F1D6B03E200047010 /* DDTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDTableViewController.m; sourceTree = "<group>"; };
 		900B11401D6B03E200047010 /* DDTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DDTableViewController.xib; sourceTree = "<group>"; };
-		904D30131D6C559200164410 /* DDProgressHUD.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = DDProgressHUD.bundle; sourceTree = "<group>"; };
+		904D30151D6D8FC900164410 /* error@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "error@2x.png"; sourceTree = "<group>"; };
+		904D30161D6D8FC900164410 /* error@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "error@3x.png"; sourceTree = "<group>"; };
+		904D30171D6D8FC900164410 /* success@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "success@2x.png"; sourceTree = "<group>"; };
+		904D30181D6D8FC900164410 /* success@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "success@3x.png"; sourceTree = "<group>"; };
 		9094C0791D6C1D59008F021A /* DDActivityIndicatorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDActivityIndicatorView.h; sourceTree = "<group>"; };
 		9094C07A1D6C1D59008F021A /* DDActivityIndicatorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDActivityIndicatorView.m; sourceTree = "<group>"; };
 		9094C07C1D6C4B47008F021A /* DDActivityIndicatorGradientCircleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDActivityIndicatorGradientCircleView.h; sourceTree = "<group>"; };
@@ -112,7 +118,10 @@
 		900B11311D6B03C200047010 /* DDProgressHUD */ = {
 			isa = PBXGroup;
 			children = (
-				904D30131D6C559200164410 /* DDProgressHUD.bundle */,
+				904D30151D6D8FC900164410 /* error@2x.png */,
+				904D30161D6D8FC900164410 /* error@3x.png */,
+				904D30171D6D8FC900164410 /* success@2x.png */,
+				904D30181D6D8FC900164410 /* success@3x.png */,
 				9094C07C1D6C4B47008F021A /* DDActivityIndicatorGradientCircleView.h */,
 				9094C07D1D6C4B47008F021A /* DDActivityIndicatorGradientCircleView.m */,
 				9094C0791D6C1D59008F021A /* DDActivityIndicatorView.h */,
@@ -193,9 +202,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				904D301B1D6D8FC900164410 /* success@2x.png in Resources */,
+				904D301A1D6D8FC900164410 /* error@3x.png in Resources */,
 				900B111D1D6B039D00047010 /* LaunchScreen.storyboard in Resources */,
-				904D30141D6C559200164410 /* DDProgressHUD.bundle in Resources */,
+				904D30191D6D8FC900164410 /* error@2x.png in Resources */,
 				900B11421D6B03E200047010 /* DDTableViewController.xib in Resources */,
+				904D301C1D6D8FC900164410 /* success@3x.png in Resources */,
 				900B111A1D6B039D00047010 /* Assets.xcassets in Resources */,
 				900B11181D6B039D00047010 /* Main.storyboard in Resources */,
 			);

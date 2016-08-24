@@ -103,18 +103,8 @@ typedef NS_ENUM(NSUInteger, DDProgressHUDType) {
         self.labelFont = [UIFont systemFontOfSize:12.0f];
         self.labelLineSpacing = 8.0f;
         self.tintColor = [UIColor whiteColor];
-
-        NSBundle *mainBundle = [NSBundle bundleForClass:[DDProgressHUD class]];
-        NSString *imageBundlePath = [mainBundle pathForResource:@"DDProgressHUD" ofType:@"bundle"];
-        NSBundle *imageBundle = [NSBundle bundleWithPath:imageBundlePath];
-        NSInteger scale = [UIScreen mainScreen].scale;
-        if (scale < 2 || scale > 3) {
-            scale = 2;
-        }
-        _successImage = [UIImage imageWithContentsOfFile:[imageBundle pathForResource:[NSString stringWithFormat:@"success@%ldx",(long)scale] ofType:@"png"]];
-        _errorImage = [UIImage imageWithContentsOfFile:[imageBundle pathForResource:[NSString stringWithFormat:@"error@%ldx",(long)scale] ofType:@"png"]];
-        _successImage = [_successImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        _errorImage = [_errorImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        _successImage = [[UIImage imageNamed:@"success"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        _errorImage = [[UIImage imageNamed:@"error"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     }
     return self;
 }
