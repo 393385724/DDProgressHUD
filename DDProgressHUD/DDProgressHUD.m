@@ -10,10 +10,7 @@
 #import "DDActivityIndicatorView.h"
 #import "DDActivityIndicatorGradientCircleView.h"
 
-/**@brief 各个元素之间的纵向间距*/
-CGFloat DDItemsVerticalSpace = 12.0f;
-/**@brief 文本框横向边距*/
-CGFloat DDStatusLabelHorizontaMargin = 12.0f;
+const CGFloat DDHUDViewMinWidth = 100.0f;
 
 /**@brief 定义了HUD显示的风格*/
 typedef NS_ENUM(NSUInteger, DDProgressHUDType) {
@@ -44,9 +41,13 @@ typedef NS_ENUM(NSUInteger, DDProgressHUDType) {
 
 /**@brief showtext 和 showImage 消失定时器*/
 @property (nonatomic, strong) NSTimer *fadeOutTimer;
+@property (nonatomic, copy) DDProgressHUDDismissCompletion completionBlock;
 
 /**@brief statusLabel显示的是否是富文本，默认NO*/
 @property (nonatomic, assign) BOOL isAttributedString;
+/**@brief 元素边距, 默认12.0f*/
+@property (nonatomic, assign) CGFloat itemsMarginSpace;
+/**@brief 文本框最大宽度 0.6的屏幕宽度-边距*/
 @property (nonatomic, assign) CGFloat statusLabelMaxWidth;
 
 //------------------UI Config
@@ -73,8 +74,9 @@ typedef NS_ENUM(NSUInteger, DDProgressHUDType) {
 
 
 @property (nonatomic, strong) NSLayoutConstraint *statusLabelTopConstraint;
+@property (nonatomic, strong) NSLayoutConstraint *statusLabelCenterXConstraint;
 @property (nonatomic, strong) NSLayoutConstraint *statusLabelHeightConstraint;
-@property (nonatomic, copy) NSArray *statusLabelConstraints;
+@property (nonatomic, strong) NSLayoutConstraint *statusLabelWidthConstraint;
 
 @end
 
@@ -95,7 +97,8 @@ typedef NS_ENUM(NSUInteger, DDProgressHUDType) {
         self.alpha = 0.0;
         self.hudType = DDProgressHUDTypeInit;
         self.isAttributedString = NO;
-        self.statusLabelMaxWidth = ceil(CGRectGetWidth(self.bounds)*0.6 - 2*DDStatusLabelHorizontaMargin);
+        self.itemsMarginSpace = 12.0f;
+        self.statusLabelMaxWidth = ceil(CGRectGetWidth(self.bounds)*0.6 - 2*self.itemsMarginSpace);
 
         self.hudStyle = DDProgressHUDStyleDark;
         self.hudMaskStyle = DDProgressHUDMaskStyleNone;
@@ -275,8 +278,7 @@ typedef NS_ENUM(NSUInteger, DDProgressHUDType) {
         [self cancelImageView];
     }
     [self showWithStatus:status];
-    self.fadeOutTimer = [NSTimer timerWithTimeInterval:duration target:self selector:@selector(dismiss) userInfo:nil repeats:NO];
-    [[NSRunLoop mainRunLoop] addTimer:self.fadeOutTimer forMode:NSRunLoopCommonModes];
+    [self dismissWithDelay:duration completion:nil];
 }
 
 #pragma mark - --------UI----------
@@ -311,27 +313,28 @@ typedef NS_ENUM(NSUInteger, DDProgressHUDType) {
 
 - (void)showWithStatus:(NSString*)status {
     [self updateStatus:status];
+    __weak DDProgressHUD *weakSelf = self;
+    __block void (^animationsBlock)(void) = ^{
+        __strong DDProgressHUD *strongSelf = weakSelf;
+        if(strongSelf) {
+            strongSelf.alpha = 1.0f;
+            strongSelf.hudView.alpha = 1.0f;
+        }
+    };
+    CGFloat duration = 0;
     if (self.alpha != 1.0 || self.hudView.alpha != 1.0) {
         self.alpha = 0.0f;
         self.hudView.alpha = 0.0f;
-        
-        __weak DDProgressHUD *weakSelf = self;
-        __block void (^animationsBlock)(void) = ^{
-            __strong DDProgressHUD *strongSelf = weakSelf;
-            if(strongSelf) {
-                strongSelf.alpha = 1.0f;
-                strongSelf.hudView.alpha = 1.0f;
-            }
-        };
-        [UIView transitionWithView:self.hudView
-                          duration:0.25
-                           options:UIViewAnimationOptionAllowUserInteraction |
-         UIViewAnimationCurveEaseIn | UIViewAnimationOptionBeginFromCurrentState
-                        animations:^{
-                            animationsBlock();
-                        } completion:^(BOOL finished) {
-                        }];
+        duration = 0.25;
     }
+    [UIView transitionWithView:self.hudView
+                      duration:duration
+                       options:UIViewAnimationOptionAllowUserInteraction |
+     UIViewAnimationCurveEaseIn | UIViewAnimationOptionBeginFromCurrentState
+                    animations:^{
+                        animationsBlock();
+                    } completion:^(BOOL finished) {
+                    }];
 }
 
 - (void)updateStatus:(NSString *)status{
@@ -427,12 +430,14 @@ typedef NS_ENUM(NSUInteger, DDProgressHUDType) {
     self.hudViewHeightConstraint = nil;
 
     
-    [self.hudView removeConstraints:self.statusLabelConstraints];
-    self.statusLabelConstraints = nil;
+    [self.hudView removeConstraint:self.statusLabelCenterXConstraint];
+    self.statusLabelCenterXConstraint = nil;
     [self.hudView removeConstraint:self.statusLabelTopConstraint];
     self.statusLabelTopConstraint = nil;
-    [self.hudView removeConstraint:self.statusLabelHeightConstraint];
+    [self.statusLabel removeConstraint:self.statusLabelHeightConstraint];
     self.statusLabelHeightConstraint = nil;
+    [self.statusLabel removeConstraint:self.statusLabelWidthConstraint];
+    self.statusLabelWidthConstraint = nil;
     [self.statusLabel removeFromSuperview];
     self.statusLabel = nil;
 
@@ -464,16 +469,18 @@ typedef NS_ENUM(NSUInteger, DDProgressHUDType) {
 
 - (void)updateHUDFrame {
     CGSize statusLabelSize = [self calculateStatusLabelSizeWithString:self.statusLabel.text isAttributedString:self.isAttributedString];
-    self.statusLabelTopConstraint.constant = DDItemsVerticalSpace;
+    CGFloat verticalMarginSpace = self.itemsMarginSpace;
+    self.statusLabelTopConstraint.constant = verticalMarginSpace;
     if (self.hudType == DDProgressHUDTypeCycle ||
         self.hudType == DDProgressHUDTypeClock ||
         self.hudType == DDProgressHUDTypeImage) {
         self.statusLabelTopConstraint.constant += self.indefiniteTopConstraint.constant + self.indefiniteHeightConstraint.constant;
     }
     self.statusLabelHeightConstraint.constant = ceil(statusLabelSize.height);
+    self.statusLabelWidthConstraint.constant = MAX(DDHUDViewMinWidth - 2*self.itemsMarginSpace, statusLabelSize.width);
     
-    self.hudViewWidthConstraint.constant = MAX(100, statusLabelSize.width + 2*DDStatusLabelHorizontaMargin);
-    self.hudViewHeightConstraint.constant = self.statusLabelTopConstraint.constant + self.statusLabelHeightConstraint.constant + DDItemsVerticalSpace;
+    self.hudViewWidthConstraint.constant = self.statusLabelWidthConstraint.constant + 2*self.itemsMarginSpace;
+    self.hudViewHeightConstraint.constant = self.statusLabelTopConstraint.constant + self.statusLabelHeightConstraint.constant + verticalMarginSpace;
 }
 
 #pragma mark - -----------TextAttribute
@@ -492,13 +499,20 @@ typedef NS_ENUM(NSUInteger, DDProgressHUDType) {
 
 #pragma mark - dismiss
 
-- (void)dismiss{
-    [self dismissWithDelay:0 completion:nil];
+- (void)dismissWithDelay:(NSTimeInterval)delay completion:(DDProgressHUDDismissCompletion)completion {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (self.fadeOutTimer) {
+            [self.fadeOutTimer invalidate];
+            self.fadeOutTimer = nil;
+        }
+        self.fadeOutTimer = [NSTimer timerWithTimeInterval:delay target:self selector:@selector(dismiss) userInfo:nil repeats:NO];
+        [[NSRunLoop mainRunLoop] addTimer:self.fadeOutTimer forMode:NSRunLoopCommonModes];
+    });
 }
 
-- (void)dismissWithDelay:(NSTimeInterval)delay completion:(DDProgressHUDDismissCompletion)completion {
+- (void)dismiss{
     __weak DDProgressHUD *weakSelf = self;
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_async(dispatch_get_main_queue(),^{
         __strong DDProgressHUD *strongSelf = weakSelf;
         if (strongSelf) {
             __block void (^animationsBlock)(void) = ^{
@@ -508,8 +522,9 @@ typedef NS_ENUM(NSUInteger, DDProgressHUDType) {
             __block void (^completionBlock)(void) = ^{
                 if(strongSelf.alpha == 0.0f && strongSelf.hudView.alpha == 0.0f){
                     [strongSelf clearAll];
-                    if (completion) {
-                        completion();
+                    if (strongSelf.completionBlock) {
+                        strongSelf.completionBlock();
+                        strongSelf.completionBlock = nil;
                     }
                 }
             };
@@ -524,10 +539,11 @@ typedef NS_ENUM(NSUInteger, DDProgressHUDType) {
                                     completionBlock();
                                 }
                             }];
-        } else if (completion){
-            completion();
+        } else if (strongSelf.completionBlock){
+            strongSelf.completionBlock();
+            strongSelf.completionBlock = nil;
         }
-
+        
     });
 }
 
@@ -550,7 +566,7 @@ typedef NS_ENUM(NSUInteger, DDProgressHUDType) {
 
 - (void)addLayoutConstraintsWithTopView:(id)view descriptionKey:(NSString *)descriptionKey height:(CGFloat)height{
     NSDictionary* views = @{descriptionKey:view};
-    NSLayoutConstraint *indefiniteViewTopConstraint = [NSLayoutConstraint constraintWithItem:view attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.hudView attribute:NSLayoutAttributeTop multiplier:1 constant:DDItemsVerticalSpace];
+    NSLayoutConstraint *indefiniteViewTopConstraint = [NSLayoutConstraint constraintWithItem:view attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.hudView attribute:NSLayoutAttributeTop multiplier:1 constant:self.itemsMarginSpace];
     [self.hudView addConstraint:indefiniteViewTopConstraint];
     self.indefiniteTopConstraint = indefiniteViewTopConstraint;
     
@@ -571,21 +587,35 @@ typedef NS_ENUM(NSUInteger, DDProgressHUDType) {
 
 - (void)addStatusLabelLayoutConstraints{
     NSDictionary* views = @{@"statusLabel":self.statusLabel};
-    self.statusLabelTopConstraint = [NSLayoutConstraint constraintWithItem:self.statusLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.hudView attribute:NSLayoutAttributeTop multiplier:1 constant:DDItemsVerticalSpace];
+    self.statusLabelTopConstraint = [NSLayoutConstraint constraintWithItem:self.statusLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.hudView attribute:NSLayoutAttributeTop multiplier:1 constant:self.itemsMarginSpace];
     [self.hudView addConstraint:self.statusLabelTopConstraint];
+    
+    self.statusLabelCenterXConstraint = [NSLayoutConstraint constraintWithItem:self.statusLabel attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.hudView attribute:NSLayoutAttributeCenterX multiplier:1 constant:0];
+    [self.hudView addConstraint:self.statusLabelCenterXConstraint];
+    
+    self.statusLabelWidthConstraint = [[NSLayoutConstraint constraintsWithVisualFormat:@"H:[statusLabel(100)]" options:0 metrics:nil views:views] firstObject];
+    [self.hudView addConstraint:self.statusLabelWidthConstraint];
     
     self.statusLabelHeightConstraint = [[NSLayoutConstraint constraintsWithVisualFormat:@"V:[statusLabel(14)]" options:0 metrics:nil views:views] firstObject];
     [self.statusLabel addConstraint:self.statusLabelHeightConstraint];
-
-    NSArray *constraints=[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-12-[statusLabel]-12-|"
-                                                                  options:NSLayoutAttributeLeft|NSLayoutAttributeRight
-                                                                  metrics:nil
-                                                                    views:views];
-    [self.hudView addConstraints:constraints];
-    self.statusLabelConstraints = constraints;
 }
 
 #pragma mark - Getter And Setter
+
+- (void)setHudType:(DDProgressHUDType)hudType{
+    if (_hudType != hudType) {
+        _hudType = hudType;
+        if (hudType == DDProgressHUDTypeAlter) {
+            self.itemsMarginSpace = 24.0f;
+            self.labelLineSpacing = 10.0f;
+        } else {
+            self.itemsMarginSpace = 12.0f;
+            self.labelLineSpacing = 8.0f;
+        }
+        self.statusLabelMaxWidth = ceil(CGRectGetWidth(self.bounds)*0.6 - 2*self.itemsMarginSpace);
+    }
+}
+
 - (UIView*)overlayView {
     if(!_overlayView) {
         _overlayView = [[UIView alloc] initWithFrame:self.bounds];

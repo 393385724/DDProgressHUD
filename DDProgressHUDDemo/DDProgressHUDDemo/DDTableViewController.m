@@ -63,13 +63,13 @@
         }];
     } else if ([title isEqualToString:@"成功Alter"]){
         [DDProgressHUD setDefaultMaskStyle:DDProgressHUDMaskStyleNone];
-        [DDProgressHUD showSucessWithStatus:@"成功Alter"];
+        [DDProgressHUD showSucessWithStatus:@"成功Alter 米动，可以全自动地记录全天活动、睡眠、运动等生活习惯，并根据大量数据分析，提供专业有益的建议，帮助人们生活得更加健康。"];
     } else if ([title isEqualToString:@"失败Alter"]){
         [DDProgressHUD setDefaultMaskStyle:DDProgressHUDMaskStyleNone];
         [DDProgressHUD showErrorWithStatus:@"失败Alter"];
     } else if ([title isEqualToString:@"文字Alter"]){
         [DDProgressHUD setDefaultMaskStyle:DDProgressHUDMaskStyleNone];
-        [DDProgressHUD showWithStatus:@"文字Alter"];
+        [DDProgressHUD showWithStatus:@"成功Alter 米动，可以全自动地记录全天活动、睡眠、运动等生活习惯，并根据大量数据分析，提供专业有益的建议，帮助人们生活得更加健康。"];
     }
 }
 
