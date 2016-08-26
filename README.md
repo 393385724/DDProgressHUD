@@ -1,0 +1,5 @@
+# DDProgressHUD
+一个简单易用的HUD指示器
+
+感谢gontovnik实现了好多Animation才使得实现起来如此简单
+https://github.com/gontovnik/DGActivityIndicatorView

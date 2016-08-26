@@ -8,14 +8,47 @@
 
 #import <UIKit/UIKit.h>
 
-typedef NS_ENUM(NSInteger, DDProgressHUDStyle) {
-    DDProgressHUDStyleDark,         // default style, black HUD and white text
-    DDProgressHUDStyleLight        // white HUD with black text
-};
-
 typedef NS_ENUM(NSUInteger, DDProgressHUDMaskStyle) {
     DDProgressHUDMaskStyleCustom = 1,     // default style, don't allow user interactions and dim the UI in the back of the HUD with a custom color
     DDProgressHUDMaskStyleNone            //  allow user interactions while HUD is displayed
+};
+
+typedef NS_ENUM(NSUInteger, DDProgressHUDActivityType) {
+    DDProgressHUDActivityTypeLineChange,
+    DDProgressHUDActivityTypeNineDots,
+    DDProgressHUDActivityTypeTriplePulse,
+    DDProgressHUDActivityTypeFiveDots,
+    DDProgressHUDActivityTypeRotatingSquares,
+    DDProgressHUDActivityTypeDoubleBounce,
+    DDProgressHUDActivityTypeTwoDots,
+    DDProgressHUDActivityTypeThreeDots,
+    DDProgressHUDActivityTypeBallPulse,
+    DDProgressHUDActivityTypeBallClipRotate,
+    DDProgressHUDActivityTypeBallClipRotatePulse,
+    DDProgressHUDActivityTypeBallClipRotateMultiple,
+    DDProgressHUDActivityTypeBallRotate,
+    DDProgressHUDActivityTypeBallZigZag,
+    DDProgressHUDActivityTypeBallZigZagDeflect,
+    DDProgressHUDActivityTypeBallTrianglePath,
+    DDProgressHUDActivityTypeBallScale,
+    DDProgressHUDActivityTypeLineScale,
+    DDProgressHUDActivityTypeLineScaleParty,
+    DDProgressHUDActivityTypeBallScaleMultiple,
+    DDProgressHUDActivityTypeBallPulseSync,
+    DDProgressHUDActivityTypeBallBeat,
+    DDProgressHUDActivityTypeLineScalePulseOut,
+    DDProgressHUDActivityTypeLineScalePulseOutRapid,
+    DDProgressHUDActivityTypeBallScaleRipple,
+    DDProgressHUDActivityTypeBallScaleRippleMultiple,
+    DDProgressHUDActivityTypeTriangleSkewSpin,
+    DDProgressHUDActivityTypeBallGridBeat,
+    DDProgressHUDActivityTypeBallGridPulse,
+    DDProgressHUDActivityTypeRotatingSanDDGlass,
+    DDProgressHUDActivityTypeRotatingTrigons,
+    DDProgressHUDActivityTypeTripleRings,
+    DDProgressHUDActivityTypeCookieTerminator,
+    DDProgressHUDActivityTypeBallSpinFadeLoader,
+    DDProgressHUDActivityTypeClock,
 };
 
 typedef void (^DDProgressHUDDismissCompletion)(void);
@@ -23,13 +56,22 @@ typedef void (^DDProgressHUDDismissCompletion)(void);
 @interface DDProgressHUD : UIView
 
 /**
- *  @brief 设置默认的HUD风格,默认DDProgressHUDStyleDark
+ *  @brief 设置默认最小消失时间,当且仅当以alter形式出现的时候生效,默认1.5s
  *
- *  @param style DDProgressHUDStyle
+ *  @param minDismissDuration CGFloat
  */
-+ (void)setDefaultStyle:(DDProgressHUDStyle)style;
++ (void)setDefaultMinDismissDuration:(CGFloat)minDismissDuration;
 /**
- *  @brief 设置背景mask,默认DDProgressHUDMaskStyleCustom
+ *  @brief 设置默认最大消失时间,当且仅当以alter形式出现的时候生效,默认5s
+ *
+ *  @param maxDismissDuration CGFloat
+ */
++ (void)setDefaultMaxDismissDuration:(CGFloat)maxDismissDuration;
+
+
+
+/**
+ *  @brief 设置背景mask,默认DDProgressHUDMaskStyleNone
  *
  *  @param maskType DDProgressHUDMaskStyle
  */
@@ -40,19 +82,65 @@ typedef void (^DDProgressHUDDismissCompletion)(void);
  *  @param color UIColor
  */
 + (void)setDefaultMaskColor:(UIColor *)color;
+
 /**
- *  @brief 设置默认的主题颜色，默认白色 eg 文字 loading状态颜色
+ *  @brief 设置HUD默认背景色,默认黑色
  *
- *  @param tintColor UIColor
+ *  @param color UIColor
  */
-+ (void)setDefaultTintColor:(UIColor *)tintColor;
++ (void)setDefaultHUDBackGroudColor:(UIColor *)color;
+/**
+ *  @brief 设置HUD默认圆角半径,默认4.0
+ *
+ *  @param cornerRadius CGFloat
+ */
++ (void)setDefaultHUDCornerRadius:(CGFloat)cornerRadius;
+/**
+ *  @brief 设置HUD默认阴影颜色,默认0.82透明度的黑色
+ *
+ *  @param color UIColor
+ */
++ (void)setDefaultHUDShadowColor:(UIColor *)color;
+/**
+ *  @brief 设置HUD默认阴影偏移,默认CGSize(2.0,2.0)
+ *
+ *  @param shadowOffset CGSize
+ */
++ (void)setDefaultHUDShadowOffset:(CGSize)shadowOffset;
+/**
+ *  @brief 设置HUD默认阴影扩散半径,默认8.0
+ *
+ *  @param shadowRadius CGFloat
+ */
++ (void)setDefaultHUDShadowRadius:(CGFloat)shadowRadius;
+
+
+/**
+ *  @brief 设置默认活动指示器动画，默认DDProgressHUDActivityTypeLineChange
+ *
+ *  @param activityType DDProgressHUDActivityType
+ */
++ (void)setDefaultActivityType:(DDProgressHUDActivityType)activityType;
 /**
  *  @brief 设置默认的活动指示器颜色，默认橘色
  *
  *  @param activityColor UIColor
  */
 + (void)setDefaultActivityColor:(UIColor *)activityColor;
+/**
+ *  @brief 设置默认活动指示器大小, 默认25.0
+ *
+ *  @param activitySize CGFloat
+ */
++ (void)setDefaultActivitySize:(CGFloat)activitySize;
 
+
+/**
+ *  @brief 设置默认的主题颜色，默认白色 eg 文字 loading状态颜色
+ *
+ *  @param tintColor UIColor
+ */
++ (void)setDefaultTintColor:(UIColor *)tintColor;
 /**
  *  @brief 设置text字体大小,默认12pt
  *
@@ -65,6 +153,8 @@ typedef void (^DDProgressHUDDismissCompletion)(void);
  *  @param lineSpacing CGFloat
  */
 + (void)setDefaultLineSpacing:(CGFloat)lineSpacing;
+
+
 /**
  *  @brief 设置成功alter图片,默认为bundle中的图片
  *
@@ -78,18 +168,15 @@ typedef void (^DDProgressHUDDismissCompletion)(void);
  */
 + (void)setDefaultErrorImage:(UIImage *)image;
 
+
+
 /**
- *  @brief 显示一个无限等待转圈提示框，并锁住屏幕
+ *  @brief 显示一个无限等待提示框
  *
  *  @param status 提示文案
  */
 + (void)showHUDWithStatus:(NSString*)status;
-/**
- *  @brief 显示一个无限等待表针提示框，并锁住屏幕
- *
- *  @param status 提示文案
- */
-+ (void)showClockWithStatus:(NSString*)status;
+
 /**
  *  @brief 显示一个纯文本提示框并在短暂时间后消失
  *
@@ -111,13 +198,6 @@ typedef void (^DDProgressHUDDismissCompletion)(void);
  */
 + (void)showErrorWithStatus:(NSString*)status;
 
-/**
- *  @brief 显示一个带图片的提示框并在短暂时间后消失
- *
- *  @param image  图片 nil则效果等同于showInfoWithStatus
- *  @param status 提示文案
- */
-+ (void)showImage:(UIImage *)image status:(NSString*)status;
 
 /**
  *  @brief 立即消失

@@ -17,8 +17,8 @@ CGFloat const DDGCapRadius = 1.5f;
 
 - (void)setupAnimationInLayer:(CALayer *)layer withSize:(CGSize)size tintColor:(UIColor *)tintColor{
     //secondHand
-    CGFloat secondHandLayerLength = size.width/2.0 * DDGLengthOfHandRatio;
-    CAShapeLayer *secondHandLayer = [self handLayerWithSize:size handWidth:1.5f handLength:secondHandLayerLength tailLength:5 tickLength:5 tintColor:tintColor];
+    CGFloat secondHandLayerLength = size.width/2.0 * 0.8;
+    CAShapeLayer *secondHandLayer = [self handLayerWithSize:size handWidth:1.5f handLength:secondHandLayerLength tailLength:1.5 tickLength:1.5 tintColor:tintColor];
     CABasicAnimation* rotationAnimation;
     rotationAnimation = [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
     rotationAnimation.toValue = [NSNumber numberWithFloat: M_PI * 2.0 ];
@@ -80,11 +80,11 @@ CGFloat const DDGCapRadius = 1.5f;
     [bezierPath moveToPoint:addingPoint];
     addingPoint = CGPointMake(dialCenter.x, dialCenter.y + layerWidth/2.0);
     [bezierPath addLineToPoint:addingPoint];
-    addingPoint = CGPointMake(dialCenter.x + layerLength, dialCenter.y + layerWidth / 2.0);
+    addingPoint = CGPointMake(dialCenter.x + layerLength - tickLength, dialCenter.y + layerWidth / 2.0);
     [bezierPath addLineToPoint:addingPoint];
-    addingPoint =  CGPointMake(dialCenter.x + layerLength + tickLength,dialCenter.y);
+    addingPoint =  CGPointMake(dialCenter.x + layerLength,dialCenter.y);
     [bezierPath addLineToPoint:addingPoint];
-    addingPoint = CGPointMake(dialCenter.x + layerLength, dialCenter.y - layerWidth / 2.0);
+    addingPoint = CGPointMake(dialCenter.x + layerLength - tickLength, dialCenter.y - layerWidth / 2.0);
     [bezierPath addLineToPoint:addingPoint];
     [bezierPath closePath];
     

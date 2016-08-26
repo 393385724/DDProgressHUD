@@ -19,7 +19,44 @@
 
 - (void)viewDidLoad{
     [super viewDidLoad];
-    _dataSource = @[@"无蒙层darkStyle圆弧Loading",@"钟表Loading",@"成功Alter",@"失败Alter",@"文字Alter"];
+    _dataSource = @[@"Text",
+                    @"Sucess",
+                    @"Error",
+                    @"LineChange",
+                    @"NineDots",
+                    @"TriplePulse",
+                    @"FiveDots",
+                    @"RotatingSquares",
+                    @"DoubleBounce",
+                    @"TwoDots",
+                    @"ThreeDots",
+                    @"BallPulse",
+                    @"BallClipRotate",
+                    @"BallClipRotatePulse",
+                    @"BallClipRotateMultiple",
+                    @"BallRotate",
+                    @"BallZigZag",
+                    @"BallZigZagDeflect",
+                    @"BallTrianglePath",
+                    @"BallScale",
+                    @"LineScale",
+                    @"LineScaleParty",
+                    @"BallScaleMultiple",
+                    @"BallPulseSync",
+                    @"BallBeat",
+                    @"LineScalePulseOut",
+                    @"LineScalePulseOutRapid",
+                    @"BallScaleRipple",
+                    @"BallScaleRippleMultiple",
+                    @"TriangleSkewSpin",
+                    @"BallGridBeat",
+                    @"BallGridPulse",
+                    @"RotatingSanDDGlass",
+                    @"RotatingTrigons",
+                    @"TripleRings",
+                    @"CookieTerminator",
+                    @"BallSpinFadeLoader",
+                    @"Clock"];
 }
 
 #pragma mark - Table view data source
@@ -44,32 +81,18 @@
 
 #pragma mark - Table view delegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSString *title = _dataSource[indexPath.row];
-    if ([title isEqualToString:@"无蒙层darkStyle圆弧Loading"]) {
-        [DDProgressHUD setDefaultStyle:DDProgressHUDStyleDark];
-        [DDProgressHUD setDefaultMaskStyle:DDProgressHUDMaskStyleNone];
-        [DDProgressHUD setDefaultTintColor:[UIColor whiteColor]];
-        [DDProgressHUD showHUDWithStatus:@"圆弧Loading多一些文字多一行内容你能看出来的哈哈哈哈哈哈哈"];
-        [DDProgressHUD dismissWithDelay:3 completion:^{
-            NSLog(@"消失");
-        }];
-    } else if ([title isEqualToString:@"钟表Loading"]){
-        [DDProgressHUD setDefaultStyle:DDProgressHUDStyleLight];
-        [DDProgressHUD setDefaultMaskStyle:DDProgressHUDMaskStyleCustom];
-        [DDProgressHUD setDefaultTintColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:0.84]];
-        [DDProgressHUD showClockWithStatus:@"钟表Loading"];
+    if (indexPath.row == 0) {
+        [DDProgressHUD showWithStatus:@"成功Alter 米动，可以全自动地记录全天活动、睡眠、运动等生活习惯，并根据大量数据分析，提供专业有益的建议，帮助人们生活得更加健康。"];
+    } else if (indexPath.row == 1){
+        [DDProgressHUD showSucessWithStatus:@"成功Alter 米动，可以全自动地记录全天活动、睡眠、运动等生活习惯，并根据大量数据分析，提供专业有益的建议，帮助人们生活得更加健康。"];
+    } else if (indexPath.row == 2){
+        [DDProgressHUD showErrorWithStatus:@"失败Alter"];
+    } else if (indexPath.row >= 3) {
+        [DDProgressHUD setDefaultActivityType:indexPath.row - 3];
+        [DDProgressHUD showHUDWithStatus:[_dataSource[indexPath.row] stringByAppendingString:@"3秒后消失"]];
         [DDProgressHUD dismissWithDelay:3 completion:^{
             NSLog(@"钟表消失");
         }];
-    } else if ([title isEqualToString:@"成功Alter"]){
-        [DDProgressHUD setDefaultMaskStyle:DDProgressHUDMaskStyleNone];
-        [DDProgressHUD showSucessWithStatus:@"成功Alter 米动，可以全自动地记录全天活动、睡眠、运动等生活习惯，并根据大量数据分析，提供专业有益的建议，帮助人们生活得更加健康。"];
-    } else if ([title isEqualToString:@"失败Alter"]){
-        [DDProgressHUD setDefaultMaskStyle:DDProgressHUDMaskStyleNone];
-        [DDProgressHUD showErrorWithStatus:@"失败Alter"];
-    } else if ([title isEqualToString:@"文字Alter"]){
-        [DDProgressHUD setDefaultMaskStyle:DDProgressHUDMaskStyleNone];
-        [DDProgressHUD showWithStatus:@"成功Alter 米动，可以全自动地记录全天活动、睡眠、运动等生活习惯，并根据大量数据分析，提供专业有益的建议，帮助人们生活得更加健康。"];
     }
 }
 

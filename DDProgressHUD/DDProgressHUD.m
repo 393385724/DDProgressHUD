@@ -10,15 +10,12 @@
 #import "DDActivityIndicatorView.h"
 #import "DDActivityIndicatorGradientCircleView.h"
 
-const CGFloat DDHUDViewMinWidth = 100.0f;
-
 /**@brief 定义了HUD显示的风格*/
 typedef NS_ENUM(NSUInteger, DDProgressHUDType) {
     DDProgressHUDTypeInit,         /**初始值*/
-    DDProgressHUDTypeCycle,        /**弧形*/
-    DDProgressHUDTypeClock,        /**表盘*/
-    DDProgressHUDTypeAlter,        /**纯文字*/
-    DDProgressHUDTypeImage,        /**图片*/
+    DDProgressHUDTypeLoading,      /**等待框*/
+    DDProgressHUDTypeText,         /**纯文字*/
+    DDProgressHUDTypeImage,        /**图片+文字*/
 };
 
 @interface DDProgressHUD ()
@@ -45,19 +42,38 @@ typedef NS_ENUM(NSUInteger, DDProgressHUDType) {
 
 /**@brief statusLabel显示的是否是富文本，默认NO*/
 @property (nonatomic, assign) BOOL isAttributedString;
-/**@brief 元素边距, 默认12.0f*/
-@property (nonatomic, assign) CGFloat itemsMarginSpace;
-/**@brief 文本框最大宽度 0.6的屏幕宽度-边距*/
-@property (nonatomic, assign) CGFloat statusLabelMaxWidth;
+/**@brief 元素水平方向边距, 默认12.0f*/
+@property (nonatomic, assign) CGFloat itemsHorizontalMargin;
+/**@brief 元素垂直方向边距, 默认24.0f*/
+@property (nonatomic, assign) CGFloat itemsVerticalMargin;
 
 //------------------UI Config
-@property (nonatomic, assign) DDProgressHUDStyle hudStyle;
-@property (nonatomic, assign) DDProgressHUDMaskStyle hudMaskStyle;
-@property (nonatomic, strong) UIColor *hudMaskColor;
+
+@property (nonatomic, assign) CGFloat minDismissDuration;
+@property (nonatomic, assign) CGFloat maxDismissDuration;
+
+@property (nonatomic, assign) DDProgressHUDMaskStyle maskStyle;
+@property (nonatomic, strong) UIColor *maskColor;
+
+@property (nonatomic, assign) CGFloat hudMinWidth;
+@property (nonatomic, assign) CGFloat hudMaxWidth;
+@property (nonatomic, strong) UIColor *hudBackgroundColor;
+@property (nonatomic, assign) CGFloat hudCornerRadius;
+@property (nonatomic, strong) UIColor *hudShadowColor;
+@property (nonatomic, assign) CGSize hudShadowOffset;
+@property (nonatomic, assign) CGFloat hudShadowRadius;
+
+
+@property (nonatomic, assign) DDProgressHUDActivityType activityType;
+@property (nonatomic, assign) DDProgressHUDActivityType lastActivityType;
+
 @property (nonatomic, strong) UIFont *labelFont;
 @property (nonatomic, assign) CGFloat labelLineSpacing;
 @property (nonatomic, strong) UIColor *tintColor;
+
 @property (nonatomic, strong) UIColor *activityColor;
+@property (nonatomic, assign) CGFloat activitySize;
+
 @property (nonatomic, strong) UIImage *successImage;
 @property (nonatomic, strong) UIImage *errorImage;
 
@@ -98,16 +114,31 @@ typedef NS_ENUM(NSUInteger, DDProgressHUDType) {
         self.alpha = 0.0;
         self.hudType = DDProgressHUDTypeInit;
         self.isAttributedString = NO;
-        self.itemsMarginSpace = 12.0f;
-        self.statusLabelMaxWidth = ceil(CGRectGetWidth(self.bounds)*0.6 - 2*self.itemsMarginSpace);
+        self.itemsVerticalMargin = 12.0f;
+        self.itemsHorizontalMargin = 24.0f;
 
-        self.hudStyle = DDProgressHUDStyleDark;
-        self.hudMaskStyle = DDProgressHUDMaskStyleNone;
-        self.hudMaskColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.54f];
-        self.labelFont = [UIFont systemFontOfSize:12.0f];
+        self.minDismissDuration = 1.5f;
+        self.maxDismissDuration = 5.0f;
+        
+        self.maskStyle = DDProgressHUDMaskStyleNone;
+        self.maskColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.54f];
+        
+        self.hudMinWidth = 108.0f;
+        self.hudMaxWidth = 216.0f;
+        self.hudBackgroundColor = [UIColor blackColor];
+        self.hudCornerRadius = 4.0f;
+        self.hudShadowColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.82f];
+        self.hudShadowOffset = CGSizeMake(2.0, 2.0);
+        self.hudShadowRadius = 8.0;
+        
+        self.activityType = DDProgressHUDActivityTypeLineChange;
+        self.activityColor = [UIColor colorWithRed:255.0/255.0 green:95.0/255.0 blue:0 alpha:1];
+        self.activitySize = 22.0f;
+        
+        self.labelFont = [UIFont systemFontOfSize:14.0f];
         self.labelLineSpacing = 8.0f;
         self.tintColor = [UIColor whiteColor];
-        self.activityColor = [UIColor colorWithRed:255.0/255.0 green:95.0/255.0 blue:0 alpha:1];
+        
         _successImage = [[UIImage imageNamed:@"success"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         _errorImage = [[UIImage imageNamed:@"error"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     }
@@ -116,17 +147,50 @@ typedef NS_ENUM(NSUInteger, DDProgressHUDType) {
 
 #pragma mark - Public Methods
 
-+ (void)setDefaultStyle:(DDProgressHUDStyle)style{
-    [self sharedView].hudStyle = style;
+#pragma mark - UI Confige
+
++ (void)setDefaultMinDismissDuration:(CGFloat)minDismissDuration{
+    [self sharedView].minDismissDuration = minDismissDuration;
+}
++ (void)setDefaultMaxDismissDuration:(CGFloat)maxDismissDuration{
+    [self sharedView].maxDismissDuration = maxDismissDuration;
 }
 
 + (void)setDefaultMaskStyle:(DDProgressHUDMaskStyle)maskStyle{
-    [self sharedView].hudMaskStyle = maskStyle;
+    [self sharedView].maskStyle = maskStyle;
+}
++ (void)setDefaultMaskColor:(UIColor *)color{
+    [self sharedView].maskColor = color;
 }
 
-+ (void)setDefaultMaskColor:(UIColor *)color{
-    [self sharedView].hudMaskColor = color;
+
++ (void)setDefaultHUDBackGroudColor:(UIColor *)color{
+    [self sharedView].hudBackgroundColor = color;
 }
++ (void)setDefaultHUDCornerRadius:(CGFloat)cornerRadius{
+    [self sharedView].hudCornerRadius = cornerRadius;
+}
++ (void)setDefaultHUDShadowColor:(UIColor *)color{
+    [self sharedView].hudShadowColor = color;
+}
++ (void)setDefaultHUDShadowOffset:(CGSize)shadowOffset{
+    [self sharedView].hudShadowOffset = shadowOffset;
+}
++ (void)setDefaultHUDShadowRadius:(CGFloat)shadowRadius{
+    [self sharedView].hudShadowRadius = shadowRadius;
+}
+
+
++ (void)setDefaultActivityType:(DDProgressHUDActivityType)activityType{
+    [self sharedView].activityType = activityType;
+}
++ (void)setDefaultActivityColor:(UIColor *)activityColor{
+    [self sharedView].activityColor = activityColor;
+}
++ (void)setDefaultActivitySize:(CGFloat)activitySize{
+    [self sharedView].activitySize = activitySize;
+}
+
 
 + (void)setDefaultFont:(UIFont *)font{
     [self sharedView].labelFont = font;
@@ -135,13 +199,12 @@ typedef NS_ENUM(NSUInteger, DDProgressHUDType) {
 + (void)setDefaultTintColor:(UIColor *)tintColor{
     [self sharedView].tintColor = tintColor;
 }
-+ (void)setDefaultActivityColor:(UIColor *)activityColor{
-    [self sharedView].activityColor = activityColor;
-}
 
 + (void)setDefaultLineSpacing:(CGFloat)lineSpacing{
     [self sharedView].labelLineSpacing = lineSpacing;
 }
+
+
 
 + (void)setDefaultSuccessImage:(UIImage *)image{
     [self sharedView].successImage = image;
@@ -151,34 +214,21 @@ typedef NS_ENUM(NSUInteger, DDProgressHUDType) {
     [self sharedView].errorImage = image;
 }
 
+
+#pragma mark - Show and Dismiss
 + (void)showHUDWithStatus:(NSString*)status{
     dispatch_async(dispatch_get_main_queue(), ^{
-        if ([self sharedView].hudType == DDProgressHUDTypeCycle) {
+        if ([self sharedView].hudType == DDProgressHUDTypeLoading && [self sharedView].activityType == [self sharedView].lastActivityType) {
             [[self sharedView] updateStatus:status];
         } else {
-            [self sharedView].hudType = DDProgressHUDTypeCycle;
-            [[self sharedView] showHUDStatus:status];
-        }
-    });
-}
-
-+ (void)showClockWithStatus:(NSString*)status{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if ([self sharedView].hudType == DDProgressHUDTypeClock) {
-            [[self sharedView] updateStatus:status];
-        } else {
-            [self sharedView].hudType = DDProgressHUDTypeClock;
+            [self sharedView].hudType = DDProgressHUDTypeLoading;
             [[self sharedView] showHUDStatus:status];
         }
     });
 }
 
 + (void)showWithStatus:(NSString*)status{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        NSTimeInterval duration = [self displayDurationForString:status];
-        [self sharedView].hudType = DDProgressHUDTypeAlter;
-        [[self sharedView] showImage:nil status:status duration:duration];
-    });
+    [self showImage:nil status:status];
 }
 
 + (void)showSucessWithStatus:(NSString*)status{
@@ -187,18 +237,6 @@ typedef NS_ENUM(NSUInteger, DDProgressHUDType) {
 
 + (void)showErrorWithStatus:(NSString*)status{
     [self showImage:[self sharedView].errorImage status:status];
-}
-
-+ (void)showImage:(UIImage *)image status:(NSString*)status{
-    if (!image) {
-        [self showWithStatus:status];
-    } else {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            NSTimeInterval duration = [self displayDurationForString:status];
-            [self sharedView].hudType = DDProgressHUDTypeImage;
-            [[self sharedView] showImage:image status:status duration:duration];
-        });
-    }
 }
 
 + (void)dismiss{
@@ -220,7 +258,16 @@ typedef NS_ENUM(NSUInteger, DDProgressHUDType) {
 #pragma mark - Private Methods
 
 + (NSTimeInterval)displayDurationForString:(NSString*)string {
-    return MAX((float)string.length * 0.06 + 0.5, 2.0);
+    CGFloat currentDuration = (float)string.length * 0.05;
+    return MIN([self sharedView].maxDismissDuration, MAX([self sharedView].minDismissDuration, currentDuration));
+}
+
++ (void)showImage:(UIImage *)image status:(NSString*)status{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSTimeInterval duration = [self displayDurationForString:status];
+        [self sharedView].hudType = image ? DDProgressHUDTypeImage : DDProgressHUDTypeText;
+        [[self sharedView] showImage:image status:status duration:duration];
+    });
 }
 
 - (void)showHUDStatus:(NSString *)status{
@@ -228,34 +275,66 @@ typedef NS_ENUM(NSUInteger, DDProgressHUDType) {
     self.fadeOutTimer = nil;
     [self cancelImageView];
     [self updateViewHierarchy];
-    switch (self.hudType) {
-        case DDProgressHUDTypeCycle: {
+    switch (self.activityType) {
+        case DDProgressHUDActivityTypeLineChange: {
             [self cancelActivityAnimation];
             if (!self.indicatorGradientCircleView) {
-                self.indicatorGradientCircleView = [[DDActivityIndicatorGradientCircleView alloc] initWithFrame:CGRectMake(0, 0, 18.0f, 18.0f)];
+                self.indicatorGradientCircleView = [[DDActivityIndicatorGradientCircleView alloc] initWithFrame:CGRectMake(0, 0, self.activitySize, self.activitySize)];
                 self.indicatorGradientCircleView.translatesAutoresizingMaskIntoConstraints = NO;
                 [self.hudView addSubview:self.indicatorGradientCircleView];
                 [self addLayoutConstraintsWithTopView:self.indicatorGradientCircleView descriptionKey:@"indicatorGradientCircleView" height:CGRectGetWidth(self.indicatorGradientCircleView.bounds)];
             }
             self.indicatorGradientCircleView.tintColor = self.activityColor;
             [self.indicatorGradientCircleView startAnimating];
+
             break;
         }
-        case DDProgressHUDTypeClock: {
+        case DDProgressHUDActivityTypeNineDots:
+        case DDProgressHUDActivityTypeTriplePulse:
+        case DDProgressHUDActivityTypeFiveDots:
+        case DDProgressHUDActivityTypeRotatingSquares:
+        case DDProgressHUDActivityTypeDoubleBounce:
+        case DDProgressHUDActivityTypeTwoDots:
+        case DDProgressHUDActivityTypeThreeDots:
+        case DDProgressHUDActivityTypeBallPulse:
+        case DDProgressHUDActivityTypeBallClipRotate:
+        case DDProgressHUDActivityTypeBallClipRotatePulse:
+        case DDProgressHUDActivityTypeBallClipRotateMultiple:
+        case DDProgressHUDActivityTypeBallRotate:
+        case DDProgressHUDActivityTypeBallZigZag:
+        case DDProgressHUDActivityTypeBallZigZagDeflect:
+        case DDProgressHUDActivityTypeBallTrianglePath:
+        case DDProgressHUDActivityTypeBallScale:
+        case DDProgressHUDActivityTypeLineScale:
+        case DDProgressHUDActivityTypeLineScaleParty:
+        case DDProgressHUDActivityTypeBallScaleMultiple:
+        case DDProgressHUDActivityTypeBallPulseSync:
+        case DDProgressHUDActivityTypeBallBeat:
+        case DDProgressHUDActivityTypeLineScalePulseOut:
+        case DDProgressHUDActivityTypeLineScalePulseOutRapid:
+        case DDProgressHUDActivityTypeBallScaleRipple:
+        case DDProgressHUDActivityTypeBallScaleRippleMultiple:
+        case DDProgressHUDActivityTypeTriangleSkewSpin:
+        case DDProgressHUDActivityTypeBallGridBeat:
+        case DDProgressHUDActivityTypeBallGridPulse:
+        case DDProgressHUDActivityTypeRotatingSanDDGlass:
+        case DDProgressHUDActivityTypeRotatingTrigons:
+        case DDProgressHUDActivityTypeTripleRings:
+        case DDProgressHUDActivityTypeCookieTerminator:
+        case DDProgressHUDActivityTypeBallSpinFadeLoader:
+        case DDProgressHUDActivityTypeClock: {
             [self cancelCircleAniamtion];
             if (!self.activityIndicatorView) {
-                self.activityIndicatorView = [[DDActivityIndicatorView alloc] initWithType:DDGActivityIndicatorAnimationTypeClock];
-                self.activityIndicatorView.size = 32.0f;
-                self.activityIndicatorView.frame = CGRectMake(0, 0, self.activityIndicatorView.size, self.activityIndicatorView.size);
+                self.activityIndicatorView = [[DDActivityIndicatorView alloc] initWithType:self.activityType - 1];
+                self.activityIndicatorView.size = self.activitySize;
+                self.activityIndicatorView.frame = CGRectMake(0, 0, self.activitySize, self.activitySize);
                 self.activityIndicatorView.translatesAutoresizingMaskIntoConstraints = NO;
                 [self.hudView addSubview:self.activityIndicatorView];
                 [self addLayoutConstraintsWithTopView:self.activityIndicatorView descriptionKey:@"activityIndicatorView" height:CGRectGetWidth(self.activityIndicatorView.bounds)];
             }
+            self.activityIndicatorView.type = self.activityType - 1;
             self.activityIndicatorView.tintColor = self.activityColor;
             [self.activityIndicatorView startAnimating];
-            break;
-        }
-        default:{
             break;
         }
     }
@@ -270,14 +349,14 @@ typedef NS_ENUM(NSUInteger, DDProgressHUDType) {
     [self updateViewHierarchy];
     if (self.hudType == DDProgressHUDTypeImage) {
         if (!self.imageView) {
-            self.imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 18.0f, 18.0f)];
+            self.imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, image.size.width, image.size.width)];
             self.imageView.backgroundColor = [UIColor clearColor];
             self.imageView.contentMode = UIViewContentModeScaleAspectFit;
             self.imageView.translatesAutoresizingMaskIntoConstraints=NO;
             [self.hudView addSubview:self.imageView];
             [self addLayoutConstraintsWithTopView:self.imageView descriptionKey:@"imageView" height:CGRectGetWidth(self.imageView.bounds)];
         }
-        self.imageView.tintColor = self.tintColor;
+        self.imageView.tintColor = self.activityColor;
         self.imageView.image = image;
     } else {
         [self cancelImageView];
@@ -461,7 +540,7 @@ typedef NS_ENUM(NSUInteger, DDProgressHUDType) {
     if (!string || [string length] == 0) {
         return CGSizeZero;
     }
-    CGSize constraintSize = CGSizeMake(self.statusLabelMaxWidth, CGFLOAT_MAX);
+    CGSize constraintSize = CGSizeMake(self.hudMaxWidth - 2*self.itemsHorizontalMargin, CGFLOAT_MAX);
     CGRect stringRect = [string boundingRectWithSize:constraintSize
                                              options:
                          NSStringDrawingUsesFontLeading|
@@ -474,17 +553,16 @@ typedef NS_ENUM(NSUInteger, DDProgressHUDType) {
 
 - (void)updateHUDFrame {
     CGSize statusLabelSize = [self calculateStatusLabelSizeWithString:self.statusLabel.text isAttributedString:self.isAttributedString];
-    CGFloat verticalMarginSpace = self.itemsMarginSpace;
+    CGFloat verticalMarginSpace = self.itemsVerticalMargin;
     self.statusLabelTopConstraint.constant = verticalMarginSpace;
-    if (self.hudType == DDProgressHUDTypeCycle ||
-        self.hudType == DDProgressHUDTypeClock ||
+    if (self.hudType == DDProgressHUDTypeLoading ||
         self.hudType == DDProgressHUDTypeImage) {
         self.statusLabelTopConstraint.constant += self.indefiniteTopConstraint.constant + self.indefiniteHeightConstraint.constant;
     }
     self.statusLabelHeightConstraint.constant = ceil(statusLabelSize.height);
-    self.statusLabelWidthConstraint.constant = MAX(DDHUDViewMinWidth - 2*self.itemsMarginSpace, statusLabelSize.width);
+    self.statusLabelWidthConstraint.constant = MAX(self.hudMinWidth - 2*self.itemsHorizontalMargin, statusLabelSize.width);
     
-    self.hudViewWidthConstraint.constant = self.statusLabelWidthConstraint.constant + 2*self.itemsMarginSpace;
+    self.hudViewWidthConstraint.constant = self.statusLabelWidthConstraint.constant + 2*self.itemsHorizontalMargin;
     self.hudViewHeightConstraint.constant = self.statusLabelTopConstraint.constant + self.statusLabelHeightConstraint.constant + verticalMarginSpace;
 }
 
@@ -505,6 +583,7 @@ typedef NS_ENUM(NSUInteger, DDProgressHUDType) {
 #pragma mark - dismiss
 
 - (void)dismissWithDelay:(NSTimeInterval)delay completion:(DDProgressHUDDismissCompletion)completion {
+    self.completionBlock = completion;
     dispatch_async(dispatch_get_main_queue(), ^{
         if (self.fadeOutTimer) {
             [self.fadeOutTimer invalidate];
@@ -571,7 +650,7 @@ typedef NS_ENUM(NSUInteger, DDProgressHUDType) {
 
 - (void)addLayoutConstraintsWithTopView:(id)view descriptionKey:(NSString *)descriptionKey height:(CGFloat)height{
     NSDictionary* views = @{descriptionKey:view};
-    NSLayoutConstraint *indefiniteViewTopConstraint = [NSLayoutConstraint constraintWithItem:view attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.hudView attribute:NSLayoutAttributeTop multiplier:1 constant:self.itemsMarginSpace];
+    NSLayoutConstraint *indefiniteViewTopConstraint = [NSLayoutConstraint constraintWithItem:view attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.hudView attribute:NSLayoutAttributeTop multiplier:1 constant:self.itemsVerticalMargin];
     [self.hudView addConstraint:indefiniteViewTopConstraint];
     self.indefiniteTopConstraint = indefiniteViewTopConstraint;
     
@@ -592,7 +671,7 @@ typedef NS_ENUM(NSUInteger, DDProgressHUDType) {
 
 - (void)addStatusLabelLayoutConstraints{
     NSDictionary* views = @{@"statusLabel":self.statusLabel};
-    self.statusLabelTopConstraint = [NSLayoutConstraint constraintWithItem:self.statusLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.hudView attribute:NSLayoutAttributeTop multiplier:1 constant:self.itemsMarginSpace];
+    self.statusLabelTopConstraint = [NSLayoutConstraint constraintWithItem:self.statusLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.hudView attribute:NSLayoutAttributeTop multiplier:1 constant:self.itemsVerticalMargin];
     [self.hudView addConstraint:self.statusLabelTopConstraint];
     
     self.statusLabelCenterXConstraint = [NSLayoutConstraint constraintWithItem:self.statusLabel attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.hudView attribute:NSLayoutAttributeCenterX multiplier:1 constant:0];
@@ -606,18 +685,10 @@ typedef NS_ENUM(NSUInteger, DDProgressHUDType) {
 }
 
 #pragma mark - Getter And Setter
-
-- (void)setHudType:(DDProgressHUDType)hudType{
-    if (_hudType != hudType) {
-        _hudType = hudType;
-        if (hudType == DDProgressHUDTypeAlter) {
-            self.itemsMarginSpace = 24.0f;
-            self.labelLineSpacing = 10.0f;
-        } else {
-            self.itemsMarginSpace = 12.0f;
-            self.labelLineSpacing = 8.0f;
-        }
-        self.statusLabelMaxWidth = ceil(CGRectGetWidth(self.bounds)*0.6 - 2*self.itemsMarginSpace);
+- (void)setActivityType:(DDProgressHUDActivityType)activityType{
+    if (_activityType != activityType) {
+        self.lastActivityType = _activityType;
+        _activityType = activityType;
     }
 }
 
@@ -628,8 +699,8 @@ typedef NS_ENUM(NSUInteger, DDProgressHUDType) {
         _overlayView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         _overlayView.userInteractionEnabled = NO;
     }
-    if (self.hudMaskStyle == DDProgressHUDMaskStyleCustom){
-        _overlayView.backgroundColor = self.hudMaskColor;
+    if (self.maskStyle == DDProgressHUDMaskStyleCustom){
+        _overlayView.backgroundColor = self.maskColor;
         _overlayView.userInteractionEnabled = YES;
     } else {
         _overlayView.backgroundColor = [UIColor clearColor];
@@ -642,17 +713,13 @@ typedef NS_ENUM(NSUInteger, DDProgressHUDType) {
     if (!_hudView) {
         _hudView = [[UIView alloc] initWithFrame:CGRectZero];
         _hudView.translatesAutoresizingMaskIntoConstraints=NO;
-        _hudView.layer.shadowOffset = CGSizeMake(2.0f, 2.0f);
         _hudView.layer.shadowOpacity = 1.0;
-        _hudView.layer.shadowRadius = 8.0f;
-        _hudView.layer.cornerRadius = 4.0f;
-        _hudView.layer.shadowColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.82].CGColor;
     }
-    if (self.hudStyle == DDProgressHUDStyleDark) {
-        _hudView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.82];
-    } else {
-        _hudView.backgroundColor = [UIColor whiteColor];
-    }
+    _hudView.backgroundColor = self.hudBackgroundColor;
+    _hudView.layer.shadowOffset = self.hudShadowOffset;
+    _hudView.layer.shadowRadius = self.hudShadowRadius;
+    _hudView.layer.cornerRadius = self.hudCornerRadius;
+    _hudView.layer.shadowColor = self.hudShadowColor.CGColor;
     return _hudView;
 }
 

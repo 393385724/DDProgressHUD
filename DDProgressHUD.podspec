@@ -11,9 +11,9 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = '7.0'  
   s.requires_arc = true  
   
-  s.ios.source_files = 'DDProgressHUD/*.{h,m}','DDProgressHUD/DDActivityIndicatorView/*{h,m}','DDProgressHUD/DDActivityIndicatorView/Animations/*{h,m}'
+  s.ios.source_files = 'DDProgressHUD/*.{h,m}','DDProgressHUD/Views/*{h,m}','DDProgressHUD/DDActivityIndicatorView/*{h,m}','DDProgressHUD/DDActivityIndicatorView/Animations/*{h,m}'
   s.public_header_files = 'DDProgressHUD/DDProgressHUD.h'
-  s.ios.resources = ['DDProgressHUD/*.png']
+  s.ios.resources = ['DDProgressHUD/Resources/*.png']
   
   s.frameworks = 'Foundation', 'CoreGraphics', 'UIKit'
 end  
