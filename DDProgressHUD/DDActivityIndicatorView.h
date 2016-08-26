@@ -6,8 +6,8 @@
 //  Copyright © 2016年 LiLingang. All rights reserved.
 //
 
-#import <DGActivityIndicatorView/DGActivityIndicatorView.h>
+#import "DDGActivityIndicatorView.h"
 
-@interface DDActivityIndicatorView : DGActivityIndicatorView
+@interface DDActivityIndicatorView : DDGActivityIndicatorView
 
 @end

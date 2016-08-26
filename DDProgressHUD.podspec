@@ -13,9 +13,7 @@ Pod::Spec.new do |s|
   
   s.ios.source_files = 'DDProgressHUD/*.{h,m}'
   s.public_header_files = 'DDProgressHUD/DDProgressHUD.h'
-  s.ios.resources = ['DDLogger/*.png']
+  s.ios.resources = ['DDProgressHUD/*.png']
   
   s.frameworks = 'Foundation', 'CoreGraphics', 'UIKit'
-  s.dependency 'DGActivityIndicatorView', :git => 'https://github.com/393385724/DGActivityIndicatorView.git', :commit => '926c5140e40ec216eb5b9ac3a6add23bf4221fd8'
-
 end  

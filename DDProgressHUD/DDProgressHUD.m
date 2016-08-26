@@ -57,6 +57,7 @@ typedef NS_ENUM(NSUInteger, DDProgressHUDType) {
 @property (nonatomic, strong) UIFont *labelFont;
 @property (nonatomic, assign) CGFloat labelLineSpacing;
 @property (nonatomic, strong) UIColor *tintColor;
+@property (nonatomic, strong) UIColor *activityColor;
 @property (nonatomic, strong) UIImage *successImage;
 @property (nonatomic, strong) UIImage *errorImage;
 
@@ -106,6 +107,7 @@ typedef NS_ENUM(NSUInteger, DDProgressHUDType) {
         self.labelFont = [UIFont systemFontOfSize:12.0f];
         self.labelLineSpacing = 8.0f;
         self.tintColor = [UIColor whiteColor];
+        self.activityColor = [UIColor colorWithRed:255.0/255.0 green:95.0/255.0 blue:0 alpha:1];
         _successImage = [[UIImage imageNamed:@"success"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         _errorImage = [[UIImage imageNamed:@"error"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     }
@@ -132,6 +134,9 @@ typedef NS_ENUM(NSUInteger, DDProgressHUDType) {
 
 + (void)setDefaultTintColor:(UIColor *)tintColor{
     [self sharedView].tintColor = tintColor;
+}
++ (void)setDefaultActivityColor:(UIColor *)activityColor{
+    [self sharedView].activityColor = activityColor;
 }
 
 + (void)setDefaultLineSpacing:(CGFloat)lineSpacing{
@@ -232,21 +237,21 @@ typedef NS_ENUM(NSUInteger, DDProgressHUDType) {
                 [self.hudView addSubview:self.indicatorGradientCircleView];
                 [self addLayoutConstraintsWithTopView:self.indicatorGradientCircleView descriptionKey:@"indicatorGradientCircleView" height:CGRectGetWidth(self.indicatorGradientCircleView.bounds)];
             }
-            self.indicatorGradientCircleView.tintColor = self.tintColor;
+            self.indicatorGradientCircleView.tintColor = self.activityColor;
             [self.indicatorGradientCircleView startAnimating];
             break;
         }
         case DDProgressHUDTypeClock: {
             [self cancelCircleAniamtion];
             if (!self.activityIndicatorView) {
-                self.activityIndicatorView = [[DDActivityIndicatorView alloc] initWithType:DGActivityIndicatorAnimationTypeClock];
+                self.activityIndicatorView = [[DDActivityIndicatorView alloc] initWithType:DDGActivityIndicatorAnimationTypeClock];
                 self.activityIndicatorView.size = 32.0f;
                 self.activityIndicatorView.frame = CGRectMake(0, 0, self.activityIndicatorView.size, self.activityIndicatorView.size);
                 self.activityIndicatorView.translatesAutoresizingMaskIntoConstraints = NO;
                 [self.hudView addSubview:self.activityIndicatorView];
                 [self addLayoutConstraintsWithTopView:self.activityIndicatorView descriptionKey:@"activityIndicatorView" height:CGRectGetWidth(self.activityIndicatorView.bounds)];
             }
-            self.activityIndicatorView.tintColor = self.tintColor;
+            self.activityIndicatorView.tintColor = self.activityColor;
             [self.activityIndicatorView startAnimating];
             break;
         }

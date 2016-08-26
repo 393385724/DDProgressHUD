@@ -46,6 +46,12 @@ typedef void (^DDProgressHUDDismissCompletion)(void);
  *  @param tintColor UIColor
  */
 + (void)setDefaultTintColor:(UIColor *)tintColor;
+/**
+ *  @brief 设置默认的活动指示器颜色，默认橘色
+ *
+ *  @param activityColor UIColor
+ */
++ (void)setDefaultActivityColor:(UIColor *)activityColor;
 
 /**
  *  @brief 设置text字体大小,默认12pt
