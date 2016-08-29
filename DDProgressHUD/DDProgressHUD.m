@@ -745,7 +745,6 @@ typedef NS_ENUM(NSUInteger, DDProgressHUDType) {
     if(!_statusLabel) {
         _statusLabel = [[UILabel alloc] initWithFrame:CGRectZero];
         _statusLabel.backgroundColor = [UIColor clearColor];
-        _statusLabel.adjustsFontSizeToFitWidth = YES;
         _statusLabel.textAlignment = NSTextAlignmentCenter;
         _statusLabel.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
         _statusLabel.numberOfLines = 0;
