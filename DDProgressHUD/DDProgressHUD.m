@@ -428,7 +428,7 @@ typedef NS_ENUM(NSUInteger, DDProgressHUDType) {
 
 - (void)updateStatus:(NSString *)status{
     CGFloat estimateStatusLabelHeight = [self calculateStatusLabelSizeWithString:status isAttributedString:NO].height;
-    self.isAttributedString = ABS(estimateStatusLabelHeight - self.statusLabel.font.lineHeight) >= 2.0;
+    self.isAttributedString = estimateStatusLabelHeight - self.statusLabel.font.lineHeight >= 2.0;
     if (self.isAttributedString) {
         self.statusLabel.attributedText = [[NSAttributedString alloc] initWithString:status attributes:[self statusTextAttributes]];
     } else {
