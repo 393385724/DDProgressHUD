@@ -132,8 +132,8 @@ typedef NS_ENUM(NSUInteger, DDProgressHUDType) {
         self.hudShadowRadius = 8.0;
         
         self.activityType = DDProgressHUDActivityTypeLineChange;
-        self.activityColor = [UIColor colorWithRed:255.0/255.0 green:95.0/255.0 blue:0 alpha:1];
-        self.activitySize = 22.0f;
+        self.activityColor = [UIColor whiteColor];
+        self.activitySize = 24.0f;
         
         self.labelFont = [UIFont systemFontOfSize:14.0f];
         self.labelLineSpacing = 8.0f;
@@ -349,14 +349,19 @@ typedef NS_ENUM(NSUInteger, DDProgressHUDType) {
     [self updateViewHierarchy];
     if (self.hudType == DDProgressHUDTypeImage) {
         if (!self.imageView) {
-            self.imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, image.size.width, image.size.width)];
+            CGFloat width = MAX(image.size.width, image.size.height);
+            self.imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, width, width)];
             self.imageView.backgroundColor = [UIColor clearColor];
             self.imageView.contentMode = UIViewContentModeScaleAspectFit;
             self.imageView.translatesAutoresizingMaskIntoConstraints=NO;
+            self.imageView.layer.cornerRadius = image.size.width/2.0;
+            self.imageView.layer.borderWidth = 1.0f;
+            self.imageView.layer.masksToBounds=YES;
             [self.hudView addSubview:self.imageView];
             [self addLayoutConstraintsWithTopView:self.imageView descriptionKey:@"imageView" height:CGRectGetWidth(self.imageView.bounds)];
         }
         self.imageView.tintColor = self.activityColor;
+        self.imageView.layer.borderColor = self.activityColor.CGColor;
         self.imageView.image = image;
     } else {
         [self cancelImageView];
@@ -572,7 +577,7 @@ typedef NS_ENUM(NSUInteger, DDProgressHUDType) {
     paragraphStyle.lineSpacing = self.labelLineSpacing;
     paragraphStyle.maximumLineHeight = self.labelFont.lineHeight;
     paragraphStyle.minimumLineHeight = self.labelFont.lineHeight;
-    paragraphStyle.alignment = NSTextAlignmentCenter;
+    paragraphStyle.alignment = NSTextAlignmentLeft;
     NSDictionary *attributes = @{
                                  NSFontAttributeName:self.statusLabel.font,
                                  NSParagraphStyleAttributeName:paragraphStyle
@@ -685,6 +690,20 @@ typedef NS_ENUM(NSUInteger, DDProgressHUDType) {
 }
 
 #pragma mark - Getter And Setter
+
+- (void)setHudType:(DDProgressHUDType)hudType{
+    if (_hudType != hudType) {
+        _hudType = hudType;
+        if (hudType == DDProgressHUDTypeText) {
+            self.itemsVerticalMargin = 24.0f;
+            self.hudMaxWidth = CGRectGetWidth([UIScreen mainScreen].bounds) - 48;
+        } else {
+            self.itemsVerticalMargin = 12.0f;
+            self.hudMaxWidth = CGRectGetWidth([UIScreen mainScreen].bounds) - 160;
+        }
+    }
+}
+
 - (void)setActivityType:(DDProgressHUDActivityType)activityType{
     if (_activityType != activityType) {
         self.lastActivityType = _activityType;
@@ -697,7 +716,6 @@ typedef NS_ENUM(NSUInteger, DDProgressHUDType) {
         _overlayView = [[UIView alloc] initWithFrame:self.bounds];
         _overlayView.userInteractionEnabled = NO;
         _overlayView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        _overlayView.userInteractionEnabled = NO;
     }
     if (self.maskStyle == DDProgressHUDMaskStyleCustom){
         _overlayView.backgroundColor = self.maskColor;

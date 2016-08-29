@@ -122,7 +122,7 @@ typedef void (^DDProgressHUDDismissCompletion)(void);
  */
 + (void)setDefaultActivityType:(DDProgressHUDActivityType)activityType;
 /**
- *  @brief 设置默认的活动指示器颜色，默认橘色
+ *  @brief 设置默认的活动指示器颜色，默认whiteColor
  *
  *  @param activityColor UIColor
  */
@@ -185,14 +185,14 @@ typedef void (^DDProgressHUDDismissCompletion)(void);
 + (void)showWithStatus:(NSString*)status;
 
 /**
- *  @brief 显示一个带有默认成功图片的提示
+ *  @brief 显示一个带有默认成功图片的提示并在短暂时间后消失
  *
  *  @param status 提示文案
  */
 + (void)showSucessWithStatus:(NSString*)status;
 
 /**
- *  @brief 显示一个带有默认失败图片的提示
+ *  @brief 显示一个带有默认失败图片的提示并在短暂时间后消失
  *
  *  @param status 提示文案
  */
