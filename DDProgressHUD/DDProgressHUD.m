@@ -430,7 +430,7 @@ typedef NS_ENUM(NSUInteger, DDProgressHUDType) {
     CGFloat estimateStatusLabelHeight = [self calculateStatusLabelSizeWithString:status isAttributedString:NO].height;
     self.isAttributedString = estimateStatusLabelHeight - self.statusLabel.font.lineHeight >= 2.0;
     if (self.isAttributedString) {
-        self.statusLabel.attributedText = [[NSAttributedString alloc] initWithString:status attributes:[self statusTextAttributes]];
+        self.statusLabel.attributedText = [[NSAttributedString alloc] initWithString:status attributes:[self statusTextAttributes:YES]];
     } else {
         self.statusLabel.text = status;
     }
@@ -551,8 +551,8 @@ typedef NS_ENUM(NSUInteger, DDProgressHUDType) {
                          NSStringDrawingUsesFontLeading|
                          NSStringDrawingTruncatesLastVisibleLine|
                          NSStringDrawingUsesLineFragmentOrigin
-                                   attributes:isAttributedString ? [self statusTextAttributes] : nil
-                                      context:NULL];
+                                          attributes:[self statusTextAttributes: isAttributedString]
+                                             context:NULL];
     return stringRect.size;
 }
 
@@ -565,19 +565,19 @@ typedef NS_ENUM(NSUInteger, DDProgressHUDType) {
         self.statusLabelTopConstraint.constant += self.indefiniteTopConstraint.constant + self.indefiniteHeightConstraint.constant;
     }
     self.statusLabelHeightConstraint.constant = ceil(statusLabelSize.height);
-    self.statusLabelWidthConstraint.constant = MAX(self.hudMinWidth - 2*self.itemsHorizontalMargin, statusLabelSize.width);
+    self.statusLabelWidthConstraint.constant = MAX(self.hudMinWidth - 2*self.itemsHorizontalMargin, ceil( statusLabelSize.width));
     
     self.hudViewWidthConstraint.constant = self.statusLabelWidthConstraint.constant + 2*self.itemsHorizontalMargin;
     self.hudViewHeightConstraint.constant = self.statusLabelTopConstraint.constant + self.statusLabelHeightConstraint.constant + verticalMarginSpace;
 }
 
 #pragma mark - -----------TextAttribute
-- (NSDictionary *)statusTextAttributes{
+- (NSDictionary *)statusTextAttributes:(BOOL)hasLineSpace{
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-    paragraphStyle.lineSpacing = self.labelLineSpacing;
+    paragraphStyle.lineSpacing = hasLineSpace ? self.labelLineSpacing : 0;
     paragraphStyle.maximumLineHeight = self.labelFont.lineHeight;
     paragraphStyle.minimumLineHeight = self.labelFont.lineHeight;
-    paragraphStyle.alignment = NSTextAlignmentLeft;
+    paragraphStyle.alignment = hasLineSpace ? NSTextAlignmentLeft : NSTextAlignmentCenter;
     NSDictionary *attributes = @{
                                  NSFontAttributeName:self.statusLabel.font,
                                  NSParagraphStyleAttributeName:paragraphStyle
@@ -699,7 +699,7 @@ typedef NS_ENUM(NSUInteger, DDProgressHUDType) {
             self.hudMaxWidth = CGRectGetWidth([UIScreen mainScreen].bounds) - 48;
         } else {
             self.itemsVerticalMargin = 12.0f;
-            self.hudMaxWidth = CGRectGetWidth([UIScreen mainScreen].bounds) - 160;
+            self.hudMaxWidth = CGRectGetWidth([UIScreen mainScreen].bounds) - 150;
         }
     }
 }
@@ -744,9 +744,8 @@ typedef NS_ENUM(NSUInteger, DDProgressHUDType) {
 - (UILabel*)statusLabel {
     if(!_statusLabel) {
         _statusLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-        _statusLabel.backgroundColor = [UIColor clearColor];
+        _statusLabel.backgroundColor = [UIColor redColor];
         _statusLabel.textAlignment = NSTextAlignmentCenter;
-        _statusLabel.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
         _statusLabel.numberOfLines = 0;
         _statusLabel.translatesAutoresizingMaskIntoConstraints=NO;
     }
