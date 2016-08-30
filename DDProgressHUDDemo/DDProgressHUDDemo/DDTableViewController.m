@@ -86,7 +86,7 @@
     } else if (indexPath.row == 1){
         [DDProgressHUD showSucessWithStatus:@"成功Alter 米动，可以全自动地记录全天活动、睡眠、运动等生活习惯，并根据大量数据分析，提供专业有益的建议，帮助人们生活得更加健康。"];
     } else if (indexPath.row == 2){
-        [DDProgressHUD showErrorWithStatus:@"无网络,请稍后重试"];
+        [DDProgressHUD showErrorWithStatus:@"无网络请稍后重试重"];
     } else if (indexPath.row >= 3) {
         [DDProgressHUD setDefaultActivityType:indexPath.row - 3];
         [DDProgressHUD showHUDWithStatus:[_dataSource[indexPath.row] stringByAppendingString:@"3秒后消失"]];

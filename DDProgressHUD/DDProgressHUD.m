@@ -699,7 +699,7 @@ typedef NS_ENUM(NSUInteger, DDProgressHUDType) {
             self.hudMaxWidth = CGRectGetWidth([UIScreen mainScreen].bounds) - 48;
         } else {
             self.itemsVerticalMargin = 12.0f;
-            self.hudMaxWidth = CGRectGetWidth([UIScreen mainScreen].bounds) - 150;
+            self.hudMaxWidth = CGRectGetWidth([UIScreen mainScreen].bounds) - 142;
         }
     }
 }
