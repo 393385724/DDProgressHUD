@@ -120,8 +120,8 @@ typedef NS_ENUM(NSUInteger, DDProgressHUDType) {
         self.minDismissDuration = 1.5f;
         self.maxDismissDuration = 5.0f;
         
-        self.maskStyle = DDProgressHUDMaskStyleNone;
-        self.maskColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.54f];
+        self.maskStyle = DDProgressHUDMaskStyleCustom;
+        self.maskColor = [UIColor clearColor];
         
         self.hudMinWidth = 108.0f;
         self.hudMaxWidth = 216.0f;
@@ -624,9 +624,7 @@ typedef NS_ENUM(NSUInteger, DDProgressHUDType) {
                             animations:^{
                                 animationsBlock();
                             } completion:^(BOOL finished) {
-                                if (finished) {
-                                    completionBlock();
-                                }
+                                completionBlock();
                             }];
         } else if (strongSelf.completionBlock){
             strongSelf.completionBlock();

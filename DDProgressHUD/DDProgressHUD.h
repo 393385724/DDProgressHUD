@@ -71,7 +71,7 @@ typedef void (^DDProgressHUDDismissCompletion)(void);
 
 
 /**
- *  @brief 设置背景mask,默认DDProgressHUDMaskStyleNone
+ *  @brief 设置背景mask,默认DDProgressHUDMaskStyleCustom
  *
  *  @param maskType DDProgressHUDMaskStyle
  */
