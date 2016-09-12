@@ -33,6 +33,8 @@ typedef NS_ENUM(NSUInteger, DDProgressHUDType) {
 @property (nonatomic, strong) DDActivityIndicatorGradientCircleView *indicatorGradientCircleView;
 /**@brief 图片View*/
 @property (nonatomic, strong) UIImageView *imageView;
+/**@brief 图片View的边框*/
+@property (nonatomic, strong) CAShapeLayer *imageShapeLayer;
 /**@brief 提示文案*/
 @property (nonatomic, strong) UILabel *statusLabel;
 
@@ -354,14 +356,20 @@ typedef NS_ENUM(NSUInteger, DDProgressHUDType) {
             self.imageView.backgroundColor = [UIColor clearColor];
             self.imageView.contentMode = UIViewContentModeScaleAspectFit;
             self.imageView.translatesAutoresizingMaskIntoConstraints=NO;
-            self.imageView.layer.cornerRadius = image.size.width/2.0;
-            self.imageView.layer.borderWidth = 1.0f;
-            self.imageView.layer.masksToBounds=YES;
             [self.hudView addSubview:self.imageView];
             [self addLayoutConstraintsWithTopView:self.imageView descriptionKey:@"imageView" height:CGRectGetWidth(self.imageView.bounds)];
+            
+            CAShapeLayer *shapeLayer = [CAShapeLayer layer];
+            shapeLayer.fillColor = [UIColor clearColor].CGColor;
+            shapeLayer.lineWidth = 1.0f;
+            shapeLayer.lineJoin = kCALineJoinRound;
+            UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:self.imageView.bounds cornerRadius:width/2.0];
+            [shapeLayer setPath:path.CGPath];
+            [self.imageView.layer addSublayer:shapeLayer];
+            self.imageShapeLayer = shapeLayer;
         }
         self.imageView.tintColor = self.activityColor;
-        self.imageView.layer.borderColor = self.activityColor.CGColor;
+        self.imageShapeLayer.strokeColor = self.activityColor.CGColor;
         self.imageView.image = image;
     } else {
         [self cancelImageView];
@@ -454,6 +462,8 @@ typedef NS_ENUM(NSUInteger, DDProgressHUDType) {
     [self.imageView removeConstraint:self.indefiniteHeightConstraint];
     self.indefiniteHeightConstraint = nil;
     
+    [self.imageShapeLayer removeFromSuperlayer];
+    self.imageShapeLayer = nil;
     [self.imageView removeFromSuperview];
     self.imageView = nil;
 }
